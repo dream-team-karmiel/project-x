@@ -19,6 +19,7 @@
         <module>save-record-service</module>
         <module>close-record-service</module>
         <module>back-office</module>
+        <module>data-imitator</module>
     </modules>
 
     <groupId>com.karmiel</groupId>
