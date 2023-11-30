@@ -9,3 +9,4 @@ public class GroupFullDetectorApp {
         SpringApplication.run(GroupFullDetectorApp.class);
     }
 }
+//comment
