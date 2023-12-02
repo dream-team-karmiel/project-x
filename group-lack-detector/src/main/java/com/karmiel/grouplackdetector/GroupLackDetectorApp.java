@@ -8,6 +8,6 @@ public class GroupLackDetectorApp {
 
 
     public static void main(String[] args) {
-        SpringApplication.run(GroupLackDetectorApp.class); //xz
+        SpringApplication.run(GroupLackDetectorApp.class);
     }
 }
