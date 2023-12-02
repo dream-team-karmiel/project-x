@@ -26,6 +26,9 @@ public class GroupLackDetectorTest {
     InputDestination producer;
     @Autowired
     OutputDestination consumer;
+    String orderTopic = System.getenv("KAFKA_TOPIC_ORDER");
+    String fullTopic = System.getenv("KAFKA_TOPIC_FULL");
+    String containerTopic = System.getenv("KAFKA_TOPIC_CONTAINER");
     ObjectMapper mapper = new ObjectMapper();
     ContainerData bigContainerData = new ContainerData("001", 70.0);
     ContainerData smallContainerData = new ContainerData("001", 40.0);
@@ -35,14 +38,14 @@ public class GroupLackDetectorTest {
     @Test
     void lackDetectorTest() throws IOException {
 
-
-        producer.send(new GenericMessage<ContainerData>(bigContainerData), "container-in-0");
-        Message<byte[]> messageBig = consumer.receive(100, "full-out-0" );
+        System.out.println("Send topic: "+containerTopic+" Recieve full: "+fullTopic+" Recieve order: "+orderTopic);
+        producer.send(new GenericMessage<ContainerData>(bigContainerData), containerTopic);
+        Message<byte[]> messageBig = consumer.receive(100, fullTopic);
         assertNotNull(messageBig);
         assertEquals(fullDataExpected, mapper.readValue(messageBig.getPayload(), FullData.class));
 
-        producer.send(new GenericMessage<ContainerData>(smallContainerData), "container-in-0");
-        Message<byte[]> messageSmall = consumer.receive(100, "order-out-0" );
+        producer.send(new GenericMessage<ContainerData>(smallContainerData), containerTopic);
+        Message<byte[]> messageSmall = consumer.receive(100, orderTopic);
         assertNotNull(messageSmall);
         assertEquals(orderDataExpected, mapper.readValue(messageSmall.getPayload(), OrderData.class));
 
