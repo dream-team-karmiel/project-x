@@ -6,6 +6,7 @@ import com.karmiel.grouplackdetector.dto.OrderData;
 import com.karmiel.grouplackdetector.entity.Container;
 import com.karmiel.grouplackdetector.service.GroupLackDetectorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -20,8 +21,10 @@ public class GroupLackDetectorApp {
     @Autowired
     GroupLackDetectorService service;
     double threshold = 50;
-    String orderTopic = System.getenv("KAFKA_TOPIC_ORDER");
-    String fullTopic = System.getenv("KAFKA_TOPIC_FULL");
+    @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
+    String orderTopic;
+    @Value("${spring.cloud.stream.bindings.full-out-0.destination}")
+    String fullTopic;
 
     public static void main(String[] args) {
         SpringApplication.run(GroupLackDetectorApp.class);

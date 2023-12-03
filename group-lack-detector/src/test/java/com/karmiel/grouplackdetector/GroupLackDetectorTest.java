@@ -10,6 +10,7 @@ import com.karmiel.grouplackdetector.entity.Product;
 import com.karmiel.grouplackdetector.service.GroupLackDetectorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.binder.test.InputDestination;
@@ -28,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-@Import(TestChannelBinderConfiguration.class)
+//@Import(TestChannelBinderConfiguration.class)
 public class GroupLackDetectorTest {
     @Autowired
     InputDestination producer;
@@ -38,7 +39,8 @@ public class GroupLackDetectorTest {
     GroupLackDetectorService service;
     String orderTopic = System.getenv("KAFKA_TOPIC_ORDER");
     String fullTopic = System.getenv("KAFKA_TOPIC_FULL");
-    String containerTopic = System.getenv("KAFKA_TOPIC_CONTAINER");
+    @Value("${spring.cloud.stream.bindings.recieveContainerData-in-0.destination}")
+    String containerTopic;
     ObjectMapper mapper = new ObjectMapper();
     Package testPackage = new Package(1, "KG");
     Product testProduct = new Product
@@ -53,7 +55,7 @@ public class GroupLackDetectorTest {
     @Test
     void lackDetectorBigContainerTest() throws IOException {
         when(service.getContainer(bigContainerData)).thenReturn(testBigContainer);
-       // System.out.println("Send topic: "+containerTopic+" Recieve full: "+fullTopic+" Recieve order: "+orderTopic);
+       //System.out.println("Send topic: "+containerTopic+" Recieve full: "+fullTopic+" Recieve order: "+orderTopic);
         producer.send(new GenericMessage<>(bigContainerData), containerTopic);
         Message<byte[]> messageBig = consumer.receive(100, fullTopic);
         assertNotNull(messageBig);
@@ -62,6 +64,7 @@ public class GroupLackDetectorTest {
     @Test
     void lackDetectorSmallContainerTest() throws IOException {
         when(service.getContainer(smallContainerData)).thenReturn(testSmallContainer);
+        System.out.println("Send topic: "+containerTopic+" Recieve full: "+fullTopic+" Recieve order: "+orderTopic);
         producer.send(new GenericMessage<>(smallContainerData), containerTopic);
         Message<byte[]> messageSmall = consumer.receive(100, orderTopic);
         assertNotNull(messageSmall);

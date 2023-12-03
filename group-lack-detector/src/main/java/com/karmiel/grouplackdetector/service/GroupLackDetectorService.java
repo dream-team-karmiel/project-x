@@ -6,6 +6,8 @@ import com.karmiel.grouplackdetector.repo.ContainersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class GroupLackDetectorService {
     @Autowired
@@ -15,7 +17,8 @@ public class GroupLackDetectorService {
         System.out.println("Repo started with");
         System.out.println("container id: "+data.spotCoordinates());
         int containerId = Integer.parseInt(data.spotCoordinates());
-        return containersRepo.findById(containerId).orElseThrow();
+        return containersRepo.findById(containerId)
+                .orElseThrow(()-> new NoSuchElementException(String.format("Container with id %d not exist",containerId)));
     }
 
 }
