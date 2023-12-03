@@ -20,5 +20,10 @@ public class GroupLackDetectorService {
         return containersRepo.findById(containerId)
                 .orElseThrow(()-> new NoSuchElementException(String.format("Container with id %d not exist",containerId)));
     }
+    public void saveContainer (Container container){
+        System.out.println("Save method started");
+
+        System.out.println(containersRepo.save(container));
+    }
 
 }

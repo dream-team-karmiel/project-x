@@ -20,7 +20,8 @@ public class GroupLackDetectorApp {
     StreamBridge bridge;
     @Autowired
     GroupLackDetectorService service;
-    double threshold = 50;
+    @Value("${THRESHOLD:0.5}")
+    double threshold;
     @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
     String orderTopic;
     @Value("${spring.cloud.stream.bindings.full-out-0.destination}")
@@ -35,9 +36,9 @@ public class GroupLackDetectorApp {
 
         return data -> {
             Container container = service.getContainer(data);
+            service.saveContainer(container);
             double volume = container.quantity;
-
-            double fullness = volume / 100 * data.quantity();
+            double fullness = data.quantity() / volume;
             System.out.println("Volume: "+volume+" Fullness: "+fullness);
             if (fullness < threshold) {
                 System.out.println("Fullness < 50%");

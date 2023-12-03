@@ -37,8 +37,10 @@ public class GroupLackDetectorTest {
     OutputDestination consumer;
     @MockBean
     GroupLackDetectorService service;
-    String orderTopic = System.getenv("KAFKA_TOPIC_ORDER");
-    String fullTopic = System.getenv("KAFKA_TOPIC_FULL");
+    @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
+    String orderTopic;
+    @Value("${spring.cloud.stream.bindings.full-out-0.destination}")
+    String fullTopic;
     @Value("${spring.cloud.stream.bindings.recieveContainerData-in-0.destination}")
     String containerTopic;
     ObjectMapper mapper = new ObjectMapper();
