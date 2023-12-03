@@ -7,7 +7,7 @@ import com.karmiel.grouplackdetector.dto.OrderData;
 import com.karmiel.grouplackdetector.entity.Container;
 import com.karmiel.grouplackdetector.entity.Package;
 import com.karmiel.grouplackdetector.entity.Product;
-import com.karmiel.grouplackdetector.repo.ContainersRepo;
+import com.karmiel.grouplackdetector.service.GroupLackDetectorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +21,6 @@ import org.springframework.messaging.support.GenericMessage;
 
 
 import java.io.IOException;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +35,7 @@ public class GroupLackDetectorTest {
     @Autowired
     OutputDestination consumer;
     @MockBean
-    ContainersRepo repo;
+    GroupLackDetectorService service;
     String orderTopic = System.getenv("KAFKA_TOPIC_ORDER");
     String fullTopic = System.getenv("KAFKA_TOPIC_FULL");
     String containerTopic = System.getenv("KAFKA_TOPIC_CONTAINER");
@@ -44,27 +43,29 @@ public class GroupLackDetectorTest {
     Package testPackage = new Package(1, "KG");
     Product testProduct = new Product
             (1, "TestProductName",testPackage, 123, 1000);
-    Container testContainer = new Container(100, 1000.0, testProduct);
+    Container testBigContainer = new Container(100, 100.0, testProduct);
+    Container testSmallContainer = new Container(100, 100.0, testProduct);
     ContainerData bigContainerData = new ContainerData("100", 70.0);
     ContainerData smallContainerData = new ContainerData("100", 40.0);
     FullData fullDataExpected = new FullData("100");
     OrderData orderDataExpected = new OrderData("100", "TestProductName", 60.0);
 
     @Test
-    void lackDetectorTest() throws IOException {
-        when(repo.findById(100)).thenReturn(Optional.ofNullable(testContainer));
+    void lackDetectorBigContainerTest() throws IOException {
+        when(service.getContainer(bigContainerData)).thenReturn(testBigContainer);
        // System.out.println("Send topic: "+containerTopic+" Recieve full: "+fullTopic+" Recieve order: "+orderTopic);
-        producer.send(new GenericMessage<ContainerData>(bigContainerData), containerTopic);
+        producer.send(new GenericMessage<>(bigContainerData), containerTopic);
         Message<byte[]> messageBig = consumer.receive(100, fullTopic);
         assertNotNull(messageBig);
         assertEquals(fullDataExpected, mapper.readValue(messageBig.getPayload(), FullData.class));
-
-        producer.send(new GenericMessage<ContainerData>(smallContainerData), containerTopic);
+    }
+    @Test
+    void lackDetectorSmallContainerTest() throws IOException {
+        when(service.getContainer(smallContainerData)).thenReturn(testSmallContainer);
+        producer.send(new GenericMessage<>(smallContainerData), containerTopic);
         Message<byte[]> messageSmall = consumer.receive(100, orderTopic);
         assertNotNull(messageSmall);
         assertEquals(orderDataExpected, mapper.readValue(messageSmall.getPayload(), OrderData.class));
-
-
     }
 
 }

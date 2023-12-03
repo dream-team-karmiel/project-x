@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 public class GroupLackDetectorApp {
     @Autowired
     StreamBridge bridge;
+    @Autowired
     GroupLackDetectorService service;
     double threshold = 50;
     String orderTopic = System.getenv("KAFKA_TOPIC_ORDER");
@@ -32,13 +33,15 @@ public class GroupLackDetectorApp {
         return data -> {
             Container container = service.getContainer(data);
             double volume = container.quantity;
+
             double fullness = volume / 100 * data.quantity();
+            System.out.println("Volume: "+volume+" Fullness: "+fullness);
             if (fullness < threshold) {
-                System.out.println("Volume < 50%");
+                System.out.println("Fullness < 50%");
                 bridge.send(orderTopic,
                         new OrderData(data.spotCoordinates(), container.product.productName, volume - data.quantity()));
             } else if (fullness >= threshold) {
-                System.out.println("Volume > 50%");
+                System.out.println("Fullness > 50%");
                 bridge.send(fullTopic, new FullData(data.spotCoordinates()));
             }
         };

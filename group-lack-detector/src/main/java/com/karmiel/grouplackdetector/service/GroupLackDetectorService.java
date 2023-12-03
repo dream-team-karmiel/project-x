@@ -12,6 +12,8 @@ public class GroupLackDetectorService {
     ContainersRepo containersRepo;
 
     public Container getContainer (ContainerData data){
+        System.out.println("Repo started with");
+        System.out.println("container id: "+data.spotCoordinates());
         int containerId = Integer.parseInt(data.spotCoordinates());
         return containersRepo.findById(containerId).orElseThrow();
     }
