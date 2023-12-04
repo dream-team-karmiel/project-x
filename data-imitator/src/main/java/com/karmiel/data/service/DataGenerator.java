@@ -1,6 +1,7 @@
 package com.karmiel.data.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,34 +11,30 @@ import java.util.*;
 @RequiredArgsConstructor
 @Configuration
 public class DataGenerator {
-    public static final int N_MESSAGES = 10;
-    public static final int N_CONTAINERS = 10;
+    @Value("${n_messages}") public static final int N_MESSAGES = 10;
+    @Value("${n_containers}") public static final int N_CONTAINERS = 10;
 
     //initial container quantites
-    public static final int MIN_QTY = 75;
-    public static final int MAX_QTY = 100;
+    @Value("${min_qty}") public static final int MIN_QTY = 75;
+    @Value("${max_qty}") public static final int MAX_QTY = 100;
 
     // decrease amount
-    public static final int MIN_DECREASE = 1;
-    public static final int MAX_DECREASE = 5;
+    @Value("${min_decrease}") public static final int MIN_DECREASE = 1;
+    @Value("${max_decrease}") public static final int MAX_DECREASE = 5;
 
     //SpotCoordinates
-    public static final char MIN_LETTER = 'a';
-    public static final char MAX_LETTER = 'e';
-    public static final int MIN_NUM = 1;
-    public static final int MAX_NUM = 3;
+    @Value("${spot_letter_from}") public static final char MIN_LETTER = 'a';
+    @Value("${spot_letter_to}") public static final char MAX_LETTER = 'z';
+    @Value("${spot_number_from}") public static final int MIN_NUM = 1;
+    @Value("${spot_number_to}") public static final int MAX_NUM = 10;
 
     private static StreamBridge streamBridge;
-
     static Map<String, Double> containersMap = new HashMap<>();
 
     public static void main(String[] args) {
-
         dataDecreaseImitator();
-
     }
 
-    @Bean
     public static void populateContainerMap() {
         for (int i = 1; i <= N_CONTAINERS; i++) {
             String key = randomKeyGen(MIN_LETTER, MAX_LETTER, MIN_NUM, MAX_NUM);
@@ -45,12 +42,11 @@ public class DataGenerator {
         }
     }
 
-    @Bean
     public static void dataDecreaseImitator() {
 
         populateContainerMap();
 
-        for (int i = 0; i < N_MESSAGES; i++) {
+        for (int i = 1; i <= N_MESSAGES; i++) {
             List<String> keys = containersMap.keySet().stream().toList();
             String randomKey = keys.get(randomInt(0, keys.size()));
             Double value = containersMap.get(randomKey);
@@ -60,7 +56,7 @@ public class DataGenerator {
             } else {
                 containersMap.put(randomKey, value);
                 sendMessage(randomKey, value);
-                System.out.println(containersMap);
+                System.out.println(i + " " +containersMap);
             }
         }
     }
