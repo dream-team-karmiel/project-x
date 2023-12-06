@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 @Getter
 @NoArgsConstructor
@@ -16,6 +17,8 @@ public class Quantity {
     public int id;
     @ManyToOne
     public Container container;
+    public LocalDateTime sensorDate;
+    public double quantity;
 
 
 }
