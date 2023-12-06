@@ -8,6 +8,7 @@ import com.karmiel.grouplackdetector.entity.Container;
 import com.karmiel.grouplackdetector.entity.Package;
 import com.karmiel.grouplackdetector.entity.Product;
 import com.karmiel.grouplackdetector.service.GroupLackDetectorService;
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +32,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 //@Import(TestChannelBinderConfiguration.class)
 public class GroupLackDetectorTest {
-    @Autowired
+    @Resource
     InputDestination producer;
-    @Autowired
+    @Resource
     OutputDestination consumer;
     @MockBean
     GroupLackDetectorService service;
