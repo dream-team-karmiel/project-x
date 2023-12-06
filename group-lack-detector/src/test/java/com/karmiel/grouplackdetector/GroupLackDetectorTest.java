@@ -32,8 +32,8 @@ public class GroupLackDetectorTest {
     InputDestination producer;
     @Resource
     OutputDestination consumer;
-    @MockBean
-    GroupLackDetectorService service;
+//    @MockBean
+//    GroupLackDetectorService service;
     @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
     String orderTopic;
     @Value("${spring.cloud.stream.bindings.full-out-0.destination}")
@@ -43,16 +43,16 @@ public class GroupLackDetectorTest {
     ObjectMapper mapper = new ObjectMapper();
     Package testPackage = new Package(1, "KG");
     Product testProduct = new Product
-            (1, "TestProductName", testPackage, 100);
-    Container testContainer = new Container("a01", testProduct);
-    ContainerData bigContainerData = new ContainerData("100", 70.0);
-    ContainerData smallContainerData = new ContainerData("100", 40.0);
-    FullData fullDataExpected = new FullData("100");
-    OrderData orderDataExpected = new OrderData("100", "TestProductName", 60.0);
+            (1, "Water", testPackage, 100);
+    Container testContainer = new Container("A10", testProduct);
+    ContainerData bigContainerData = new ContainerData("A10", 70.0);
+    ContainerData smallContainerData = new ContainerData("A10", 40.0);
+    FullData fullDataExpected = new FullData("A10");
+    OrderData orderDataExpected = new OrderData("A10", "Water", 60.0);
 
     @Test
     void lackDetectorBigContainerTest() throws IOException {
-        when(service.getContainer(bigContainerData)).thenReturn(testContainer);
+       // when(service.getContainer(bigContainerData)).thenReturn(testContainer);
         //System.out.println("Send topic: "+containerTopic+" Recieve full: "+fullTopic+" Recieve order: "+orderTopic);
         producer.send(new GenericMessage<>(bigContainerData), containerTopic);
         Message<byte[]> messageBig = consumer.receive(100, fullTopic);
@@ -62,7 +62,7 @@ public class GroupLackDetectorTest {
 
     @Test
     void lackDetectorSmallContainerTest() throws IOException {
-        when(service.getContainer(smallContainerData)).thenReturn(testContainer);
+        //when(service.getContainer(smallContainerData)).thenReturn(testContainer);
         System.out.println("Send topic: " + containerTopic + " Recieve full: " + fullTopic + " Recieve order: " + orderTopic);
         producer.send(new GenericMessage<>(smallContainerData), containerTopic);
         Message<byte[]> messageSmall = consumer.receive(100, orderTopic);
