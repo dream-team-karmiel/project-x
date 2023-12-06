@@ -16,9 +16,9 @@ public class GroupLackDetectorService {
     public Container getContainer (ContainerData data){
         System.out.println("Repo started with");
         System.out.println("container id: "+data.spotCoordinates());
-        int containerId = Integer.parseInt(data.spotCoordinates());
+        String containerId = data.spotCoordinates();
         return containersRepo.findById(containerId)
-                .orElseThrow(()-> new NoSuchElementException(String.format("Container with id %d not exist",containerId)));
+                .orElseThrow(()-> new NoSuchElementException(String.format("Container with id %s not exist",containerId)));
     }
     public void saveContainer (Container container){
         System.out.println("Save method started");

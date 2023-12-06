@@ -5,19 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "containers")
-public class Container {
+@Table(name = "quantities")
+public class Quantity {
     @Id
-    public String spotCoordinatesId;
+    public int id;
     @ManyToOne
-    public Product product;
-
-
-
+    public Container container;
 
 
 }

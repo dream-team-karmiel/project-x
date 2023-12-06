@@ -30,14 +30,13 @@ public class GroupLackDetectorKafkaService {
 
         return data -> {
             Container container = service.getContainer(data);
-            service.saveContainer(container);
-            double volume = container.quantity;
-            double fullness = data.quantity() / volume;
-            System.out.println("Volume: "+volume+" Fullness: "+fullness);
+            double capacity = container.product.capacity;
+            double fullness = data.quantity() / capacity;
+            System.out.println("Volume: "+capacity+" Fullness: "+fullness);
             if (fullness < threshold) {
                 System.out.println("Fullness < 50%");
                 bridge.send(orderTopic,
-                        new OrderData(data.spotCoordinates(), container.product.productName, volume - data.quantity()));
+                        new OrderData(data.spotCoordinates(), container.product.productName, capacity - data.quantity()));
             } else if (fullness >= threshold) {
                 System.out.println("Fullness > 50%");
                 bridge.send(fullTopic, new FullData(data.spotCoordinates()));
