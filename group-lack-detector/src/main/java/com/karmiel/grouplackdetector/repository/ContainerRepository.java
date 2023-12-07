@@ -1,9 +1,9 @@
 package com.karmiel.grouplackdetector.repository;
 
-import com.karmiel.grouplackdetector.dto.ContainerData;
+import com.karmiel.grouplackdetector.model.Container;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
-public interface ContainerRepository {
-    Optional<ContainerData> findDataById(String spotCoordinates);
+@Repository
+public interface ContainerRepository extends CrudRepository<Container, String> {
 }

@@ -1,9 +1,9 @@
 package com.karmiel.grouplackdetector.service;
 
-import com.karmiel.grouplackdetector.dto.ContainerData;
 import com.karmiel.grouplackdetector.dto.NewOrder;
 import com.karmiel.grouplackdetector.dto.Sensor;
 import com.karmiel.grouplackdetector.dto.SpotCoordinates;
+import com.karmiel.grouplackdetector.model.Container;
 import com.karmiel.grouplackdetector.repository.ContainerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,45 +25,43 @@ public class GroupLackDetectorServiceImpl implements GroupLackDetectorService {
     @Value("${app.group-lack-detector.limit:0.5}")
     private double limit;
 
-    @Value("${app.group-lack-detector.binding.new-order:topic-1-1}")
-    String newOrder;
+    @Value("${spring.cloud.stream.bindings.topic-1-1.destination:topic-1-1}")
+    private String newOrderTopic;
 
-    @Value("${app.group-lack-detector.binding.check-open-order:topic-1-2}")
-    String checkOpenOrder;
+    @Value("${spring.cloud.stream.bindings.topic-1-2.destination:topic-1-2}")
+    private String checkOpenOrder;
 
     @Override
     public void detect(Sensor sensor) {
-        ContainerData data = getContainerCapacity(sensor.spotCoordinates());
-        if (isGood(sensor, data)) {
+        Container container = getContainerCapacity(sensor.spotCoordinates());
+        if (isGood(sensor, container)) {
             sendCheckOpenOrder(sensor.spotCoordinates());
         } else {
-            Double requiredQuantity = calculateRequiredQuantity(data, sensor.quantity());
-            sendNewOrder(sensor.spotCoordinates(), data.productName(), requiredQuantity);
+            Double requiredQuantity = calculateRequiredQuantity(container, sensor.quantity());
+            sendNewOrder(sensor.spotCoordinates(), container.getProduct().getProductName(), requiredQuantity);
         }
     }
 
     @Override
-    public ContainerData getContainerCapacity(String containerId) {
-        // TODO: Подключение запрос к PostgreSQL
-        return repository.findDataById(containerId).orElseThrow(() ->
+    public Container getContainerCapacity(String containerId) {
+        return repository.findById(containerId).orElseThrow(() ->
                 new NoSuchElementException(String.format("Container with id %s does not exists", containerId)));
     }
 
     @Override
-    public Boolean isGood(Sensor sensor, ContainerData data) {
-        return sensor.quantity() / data.capacity() > limit;
+    public Boolean isGood(Sensor sensor, Container container) {
+        return sensor.quantity() / container.getProduct().getCapacity() > limit;
     }
 
     @Override
-    public Double calculateRequiredQuantity(ContainerData data, Double quantity) {
-        // TODO: Логика вычисления рекумендуемого объема заказа
-        return data.capacity() - quantity;
+    public Double calculateRequiredQuantity(Container container, Double quantity) {
+        return container.getProduct().getCapacity() - quantity;
     }
 
     @Override
     public void sendNewOrder(String spotCoordinates, String productName, Double requiredQuantity) {
         NewOrder order = new NewOrder(spotCoordinates, productName, requiredQuantity);
-        streamBridge.send(newOrder, order);
+        streamBridge.send(newOrderTopic, order);
         log.trace("Message to create new order for container {} has been sent", spotCoordinates);
     }
 
