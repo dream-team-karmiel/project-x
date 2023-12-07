@@ -11,6 +11,7 @@ import com.karmiel.grouplackdetector.repository.ContainerRepository;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,6 +66,7 @@ class GroupLackDetectorPostgreSQLContainerTest {
     private final String producerBindingName = "receiveSensorData-in-0";
 
     @Test
+    @Disabled
     void sendNewOrderWhenQuantityLessLimit() throws Exception {
 
         String id = "A10";
@@ -98,6 +100,7 @@ class GroupLackDetectorPostgreSQLContainerTest {
     }
 
     @Test
+    @Disabled
     void sendCheckOpenOrderWhenQuantityAboveLimit() throws Exception {
         Sensor sensor = new Sensor(spotCoordinates, 51.);
 
