@@ -34,11 +34,11 @@ public class GroupLackDetectorTest {
     OutputDestination consumer;
     @MockBean
     GroupLackDetectorService service;
-    @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
+    @Value("${spring.cloud.stream.bindings.order-out-0.destination:new-required-order}")
     String orderTopic;
-    @Value("${spring.cloud.stream.bindings.full-out-0.destination}")
+    @Value("${spring.cloud.stream.bindings.full-out-0.destination:check-open-order}")
     String fullTopic;
-    @Value("${spring.cloud.stream.bindings.recieveContainerData-in-0.destination}")
+    @Value("${spring.cloud.stream.bindings.recieveContainerData-in-0.destination:sensor-data}")
     String containerTopic;
     ObjectMapper mapper = new ObjectMapper();
     Package testPackage = new Package(1, "KG");
