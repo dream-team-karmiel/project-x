@@ -18,7 +18,7 @@ public class GroupLackDetectorKafkaService {
     StreamBridge bridge;
     @Autowired
     GroupLackDetectorService service;
-    @Value("${THRESHOLD:0.5}")
+    @Value("${threshold:0.5}")
     double threshold;
     @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
     String orderTopic;
