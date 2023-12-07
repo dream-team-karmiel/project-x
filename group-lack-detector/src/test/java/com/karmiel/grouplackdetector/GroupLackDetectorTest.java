@@ -32,8 +32,8 @@ public class GroupLackDetectorTest {
     InputDestination producer;
     @Resource
     OutputDestination consumer;
-//    @MockBean
-//    GroupLackDetectorService service;
+    @MockBean
+    GroupLackDetectorService service;
     @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
     String orderTopic;
     @Value("${spring.cloud.stream.bindings.full-out-0.destination}")
@@ -52,7 +52,7 @@ public class GroupLackDetectorTest {
 
     @Test
     void lackDetectorBigContainerTest() throws IOException {
-       // when(service.getContainer(bigContainerData)).thenReturn(testContainer);
+        when(service.getContainer(bigContainerData)).thenReturn(testContainer);
         //System.out.println("Send topic: "+containerTopic+" Recieve full: "+fullTopic+" Recieve order: "+orderTopic);
         producer.send(new GenericMessage<>(bigContainerData), containerTopic);
         Message<byte[]> messageBig = consumer.receive(100, fullTopic);
@@ -62,7 +62,7 @@ public class GroupLackDetectorTest {
 
     @Test
     void lackDetectorSmallContainerTest() throws IOException {
-        //when(service.getContainer(smallContainerData)).thenReturn(testContainer);
+        when(service.getContainer(smallContainerData)).thenReturn(testContainer);
         System.out.println("Send topic: " + containerTopic + " Recieve full: " + fullTopic + " Recieve order: " + orderTopic);
         producer.send(new GenericMessage<>(smallContainerData), containerTopic);
         Message<byte[]> messageSmall = consumer.receive(100, orderTopic);
