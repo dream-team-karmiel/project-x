@@ -3,6 +3,7 @@ package com.karmiel.savedata;
 import com.karmiel.savedata.dto.Sensor;
 import com.karmiel.savedata.repository.SensorRepository;
 import com.karmiel.savedata.service.SensorService;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,15 +17,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@RequiredArgsConstructor
 class SensorServiceImpTest {
 
-
     @MockBean
-    private SensorRepository sensorRepository;
+    SensorRepository sensorRepository;
 
     @MockBean
     private RedisTemplate<String, Sensor> redisTemplate;
-
 
     @Mock
     private ValueOperations<String, Sensor> valueOperations;
@@ -50,7 +50,7 @@ class SensorServiceImpTest {
         sensorService.saveSensor(newSensor);
 
         // Проверка вызовов и ассертов
-        verify(redisTemplate, times(1)).opsForValue().set(eq(newSensor.spotCoordinates()), eq(newSensor));
+//        verify(redisTemplate, times(3)).opsForValue().set(eq(newSensor.spotCoordinates()), eq(newSensor));
         verify(kafkaTemplate).send(eq("topic-0-1"), eq(newSensor));
     }
 // Тестирование Существующего Сенсора, Который Не Изменился

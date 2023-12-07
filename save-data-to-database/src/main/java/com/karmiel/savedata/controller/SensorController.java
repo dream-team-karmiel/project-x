@@ -9,20 +9,14 @@ import java.util.function.Consumer;
 
 @Controller
 public class SensorController {
+    private final SensorService service;
 
-//    SensorService service;
-private final SensorService service;
     public SensorController(SensorService service) {
         this.service = service;
     }
+
     @Bean
     public Consumer<Sensor> sensorConsumer() {
         return service::saveSensor;
     }
 }
-
-
-//{
-//        "spotCoordinates": String,
-//        "quantity": Double
-//}
