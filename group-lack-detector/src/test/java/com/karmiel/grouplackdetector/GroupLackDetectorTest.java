@@ -38,7 +38,7 @@ public class GroupLackDetectorTest {
     String orderTopic;
     @Value("${spring.cloud.stream.bindings.full-out-0.destination:check-open-order}")
     String fullTopic;
-    @Value("${spring.cloud.stream.bindings.recieveContainerData-in-0.destination:sensor-data}")
+    @Value("${spring.cloud.stream.bindings.recieveContainerData-in-0.destination:recieveContainerData-in-0}")
     String containerTopic;
     ObjectMapper mapper = new ObjectMapper();
     Package testPackage = new Package(1, "KG");

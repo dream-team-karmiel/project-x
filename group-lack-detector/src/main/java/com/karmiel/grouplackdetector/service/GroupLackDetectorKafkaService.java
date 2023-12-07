@@ -20,9 +20,9 @@ public class GroupLackDetectorKafkaService {
     GroupLackDetectorService service;
     @Value("${threshold:0.5}")
     double threshold;
-    @Value("${spring.cloud.stream.bindings.order-out-0.destination}")
+    @Value("${spring.cloud.stream.bindings.order-out-0.destination:new-required-order}")
     String orderTopic;
-    @Value("${spring.cloud.stream.bindings.full-out-0.destination}")
+    @Value("${spring.cloud.stream.bindings.full-out-0.destination:check-open-order}")
     String fullTopic;
 
     @Bean
