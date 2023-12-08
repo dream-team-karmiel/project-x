@@ -4,6 +4,7 @@ import com.karmiel.grouplackdetector.dto.ContainerData;
 import com.karmiel.grouplackdetector.dto.FullData;
 import com.karmiel.grouplackdetector.dto.OrderData;
 import com.karmiel.grouplackdetector.entity.Container;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Consumer;
 
+@Slf4j
 @Service
 public class GroupLackDetectorKafkaService {
     @Autowired
@@ -32,16 +34,19 @@ public class GroupLackDetectorKafkaService {
             Container container = service.getContainer(data);
             double capacity = container.product.capacity;
             double fullness = data.quantity() / capacity;
-            System.out.println("Volume: "+capacity+" Fullness: "+fullness);
+            log.trace("Volume: {} Fullness: {}", capacity, fullness);
             if (fullness < threshold) {
-                System.out.println("Fullness < 50%");
-                bridge.send(orderTopic,
-                        new OrderData(data.spotCoordinates(), container.product.productName, capacity - data.quantity()));
+                bridge.send(orderTopic, getOrderData(data, container));
+                log.trace("Fullness < 50% send message to topic {} with container ID: {}", orderTopic, data.spotCoordinates());
             } else if (fullness >= threshold) {
-                System.out.println("Fullness > 50%");
                 bridge.send(fullTopic, new FullData(data.spotCoordinates()));
+                log.trace("Fullness > 50%, send message to topic {} with container ID: {}", fullTopic, data.spotCoordinates());
             }
         };
     }
 
+    private OrderData getOrderData(ContainerData data, Container container) {
+        double requiredQuantity = container.product.capacity - data.quantity();
+        return new OrderData(data.spotCoordinates(), container.product.productName, requiredQuantity);
+    }
 }
