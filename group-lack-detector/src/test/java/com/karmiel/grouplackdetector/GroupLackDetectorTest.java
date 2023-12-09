@@ -5,7 +5,7 @@ import com.karmiel.grouplackdetector.dto.NewOrder;
 import com.karmiel.grouplackdetector.dto.Sensor;
 import com.karmiel.grouplackdetector.dto.SpotCoordinates;
 import com.karmiel.grouplackdetector.model.Container;
-import com.karmiel.grouplackdetector.model.Measures;
+import com.karmiel.grouplackdetector.model.Measure;
 import com.karmiel.grouplackdetector.model.Product;
 import com.karmiel.grouplackdetector.repository.ContainerRepository;
 import jakarta.annotation.Resource;
@@ -40,6 +40,7 @@ class GroupLackDetectorTest {
     ContainerRepository repository;
 
     private final String producerBindingName = "receiveSensorData-in-0";
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
     void sendNewOrderWhenQuantityLessLimit() throws Exception {
@@ -47,20 +48,13 @@ class GroupLackDetectorTest {
         String id = "A10";
         Sensor sensor = new Sensor(id, 49.);
 
-        Measures pack = new Measures();
-        pack.setId(1L);
-        pack.setMeasureName("Liter");
+        String measureName = "Liter";
+        Measure measure = new Measure(1L, measureName);
 
-        Product product = new Product();
-        product.setId(1L);
         String productName = "Water";
-        product.setProductName(productName);
-        product.setMeasure(pack);
-        product.setCapacity(100.);
+        Product product = new Product(1L, productName, measure, 100.);
 
-        Container container = new Container();
-        container.setSpotCoordinates(id);
-        container.setProduct(product);
+        Container container = new Container(id, product);
 
         when(repository.findById(id)).thenReturn(Optional.of(container));
 
@@ -69,7 +63,6 @@ class GroupLackDetectorTest {
         String newOrderConsumerBindingName = "topic-1-1";
         Message<byte[]> message = consumer.receive(100, newOrderConsumerBindingName);
         assertNotNull(message);
-        ObjectMapper mapper = new ObjectMapper();
         NewOrder order = new NewOrder(id, productName, 51.);
         assertEquals(order, mapper.readValue(message.getPayload(), NewOrder.class));
     }
@@ -80,20 +73,13 @@ class GroupLackDetectorTest {
         String id = "A10";
         Sensor sensor = new Sensor(id, 51.);
 
-        Measures pack = new Measures();
-        pack.setId(1L);
-        pack.setMeasureName("Liter");
+        String measureName = "Liter";
+        Measure measure = new Measure(1L, measureName);
 
-        Product product = new Product();
-        product.setId(1L);
         String productName = "Water";
-        product.setProductName(productName);
-        product.setMeasure(pack);
-        product.setCapacity(100.);
+        Product product = new Product(1L, productName, measure, 100.);
 
-        Container container = new Container();
-        container.setSpotCoordinates(id);
-        container.setProduct(product);
+        Container container = new Container(id, product);
 
         when(repository.findById(id)).thenReturn(Optional.of(container));
 
@@ -102,7 +88,6 @@ class GroupLackDetectorTest {
         String checkOrderConsumerBindingName = "topic-1-2";
         Message<byte[]> message = consumer.receive(100, checkOrderConsumerBindingName);
         assertNotNull(message);
-        ObjectMapper mapper = new ObjectMapper();
         SpotCoordinates coordinates = new SpotCoordinates(id);
         assertEquals(coordinates, mapper.readValue(message.getPayload(), SpotCoordinates.class));
     }
