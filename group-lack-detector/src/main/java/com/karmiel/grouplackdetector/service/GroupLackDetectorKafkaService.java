@@ -32,8 +32,13 @@ public class GroupLackDetectorKafkaService {
 
         return data -> {
             Container container = service.getContainer(data);
-            double capacity = container.product.capacity;
-            double fullness = data.quantity() / capacity;
+            double capacity = container.getProduct().getCapacity();
+            double fullness = 0;
+            try {
+                fullness = data.quantity() / capacity;
+            } catch (Exception e) {
+                throw new ArithmeticException("Division by zero");
+            }
             log.trace("Volume: {} Fullness: {}", capacity, fullness);
             if (fullness < threshold) {
                 bridge.send(orderTopic, getOrderData(data, container));
@@ -46,7 +51,7 @@ public class GroupLackDetectorKafkaService {
     }
 
     private OrderData getOrderData(ContainerData data, Container container) {
-        double requiredQuantity = container.product.capacity - data.quantity();
-        return new OrderData(data.spotCoordinates(), container.product.productName, requiredQuantity);
+        double requiredQuantity = container.getProduct().getCapacity() - data.quantity();
+        return new OrderData(data.spotCoordinates(), container.getProduct().getProductName(), requiredQuantity);
     }
 }

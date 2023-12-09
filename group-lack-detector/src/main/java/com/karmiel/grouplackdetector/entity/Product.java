@@ -17,11 +17,11 @@ import java.util.Objects;
 @Table(name = "products")
 public class Product {
     @Id
-    public int id;
-    public String productName;
+    private int id;
+    private String productName;
     @ManyToOne
-    public Package packageId;
-    public double capacity;
+    private Package packageId;
+    private double capacity;
 
 
 

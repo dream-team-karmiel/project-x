@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "containers")
 public class Container {
     @Id
-    public String spotCoordinatesId;
+    private String spotCoordinatesId;
     @ManyToOne
-    public Product product;
+    private Product product;
 
 
 

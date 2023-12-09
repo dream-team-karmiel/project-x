@@ -14,11 +14,11 @@ import java.util.Objects;
 @Table(name = "quantities")
 public class Quantity {
     @Id
-    public int id;
+    private int id;
     @ManyToOne
-    public Container container;
-    public LocalDateTime sensorDate;
-    public double quantity;
+    private Container container;
+    private LocalDateTime sensorDate;
+    private double quantity;
 
 
 }
