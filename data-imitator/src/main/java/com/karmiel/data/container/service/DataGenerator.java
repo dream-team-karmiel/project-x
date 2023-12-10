@@ -16,10 +16,7 @@ import java.util.*;
 @Service
 public class DataGenerator {
 
-
     private final StreamBridge streamBridge;
-
-
 
     @Value("${n_messages}")
     private final int N_MESSAGES = 10;
@@ -85,8 +82,8 @@ public class DataGenerator {
 
 
     public void decreaseQty(int min, int max) {
-        for (int i = 1; i <= N_MESSAGES; i++) {
-//        while(true){
+//        for (int i = 1; i <= N_MESSAGES; i++) {
+        while(true){
             value = value - randomInt(min, max);
             if (value <= 0) {
                 break;
