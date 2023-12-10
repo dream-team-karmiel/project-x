@@ -16,7 +16,10 @@ import java.util.*;
 @Service
 public class DataGenerator {
 
+
     private final StreamBridge streamBridge;
+
+
 
     @Value("${n_messages}")
     private final int N_MESSAGES = 10;
@@ -97,8 +100,8 @@ public class DataGenerator {
     }
 
     public void increaseQty(int min, int max) {
-        for (int i = 1; i <= N_MESSAGES; i++) {
-//        while(true){
+//        for (int i = 1; i <= N_MESSAGES; i++) {
+        while(true){
             List<String> keys = containersMap.keySet().stream().toList();
             String randomKey = keys.get(randomInt(0, keys.size()));
             Double value = containersMap.get(randomKey);
@@ -124,7 +127,7 @@ public class DataGenerator {
     }
 
     private String randomKeyGen(char minLetter, char maxLetter, int minNum, int maxNum) {
-        char keyLetter = (char) (randomInt(minLetter, maxLetter + 1));
+        char keyLetter = (char) (randomInt(minLetter, maxLetter+1));
         int keyNum = randomInt(minNum, maxNum + 1);
         return new String("" + keyLetter + keyNum);
     }
