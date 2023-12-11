@@ -22,11 +22,10 @@ class SaveRecordServiceImplTest {
     @MockBean
     RecordDataRepo recordDataRepo;
 
-    String bindingName = "receiveRecordData-in-0";
+    String bindingName = "saveRecordData-in-0";
 
     @Test
     void saveRecordDataTest() {
-        // 1
         String spotCoordinates = "A10";
         String productName = "Beer";
         Double requiredQuantity = 51.;
@@ -38,11 +37,8 @@ class SaveRecordServiceImplTest {
 
         when(recordDataRepo.save(any(Order.class))).thenReturn(order);
 
-        // 2
-
         producer.send(new GenericMessage<>(newOrder), bindingName);
 
-        // 3
         verify(recordDataRepo, times(1)).save(any(Order.class));
     }
 }
