@@ -1,8 +1,8 @@
 package com.karmiel.savedata.repo;
 
 import com.karmiel.savedata.entities.Quantity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface QuantityRepo extends JpaRepository<Quantity, Long>
+public interface QuantityRepo extends CrudRepository<Quantity, Long>
 {
 }

@@ -6,7 +6,6 @@ import com.karmiel.savedata.entities.Quantity;
 import com.karmiel.savedata.repo.QuantityRepo;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.binder.test.InputDestination;
@@ -20,8 +19,8 @@ import static org.mockito.Mockito.*;
 public class SaveDataToDatabaseTest
 {
 
-    @Resource
-    InputDestination producer;
+    //@Resource
+    //InputDestination producer;
 
     @MockBean
     QuantityRepo repo;
@@ -35,7 +34,7 @@ public class SaveDataToDatabaseTest
         ObjectMapper jsonmapper = new ObjectMapper();
         Sensor s1 = new Sensor("A10", 40.);
 
-        String inputData1 = null;
+        String inputData1;
         inputData1 = jsonmapper.writeValueAsString(s1);
 
         System.out.println(inputData1);
@@ -44,7 +43,7 @@ public class SaveDataToDatabaseTest
 
         when(repo.save(any(Quantity.class))).thenReturn(new Quantity());
 
-        producer.send(new GenericMessage<>(s1), bindingName);
+        //producer.send(new GenericMessage<>(s1), bindingName);
 
         verify(repo, times(1)).save(any(Quantity.class));
 

@@ -17,12 +17,12 @@ import java.util.function.Consumer;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SaveDataToDatabaseImpl implements SaveDataToDatabase
 {
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @Autowired
-    QuantityRepo repo;
+    final QuantityRepo repo;
 
     @Override
     @Bean
@@ -50,7 +50,7 @@ public class SaveDataToDatabaseImpl implements SaveDataToDatabase
                 } catch (JsonProcessingException e)
                 {
                     log.trace(e.getMessage());
-                    // throw new RuntimeException(e);
+                    throw new RuntimeException(e);
                 }
             }
         };
