@@ -53,7 +53,7 @@ public class DataGenerator {
     @Value("${spot_number_from}")
     private final int MIN_NUM = 1;
     @Value("${spot_number_to}")
-    private final int MAX_NUM = N_CONTAINERS;
+    private final int MAX_NUM = 10;
 
     public final Map<String, Double> containersMap = new HashMap<>();
     public List<String> keysList;
@@ -63,10 +63,10 @@ public class DataGenerator {
     @PostConstruct
     public void populateContainerMap() {
         while (containersMap.size() < N_CONTAINERS) {
-            String randomKey = randomKeyGen(MIN_LETTER, MAX_NUM);
+            String randomKey = randomKeyGen(MIN_LETTER, N_CONTAINERS);
             while (!containersMap.containsKey(randomKey)) {
-                value = (double) randomInt(MIN_QTY, MAX_QTY);
-                containersMap.put(randomKey, value);
+                Double randomValue = (double) randomInt(MIN_QTY, MAX_QTY);
+                containersMap.put(randomKey, randomValue);
             }
         }
     }
@@ -74,20 +74,17 @@ public class DataGenerator {
     @Bean
     public void dataImitator(){
         keysList = containersMap.keySet().stream().toList();
-        int count=0;
-        while(count < N_MESSAGES){
+
+        while(true){
             selectKey = keysList.get(randomInt(0, N_CONTAINERS));
-            Double value = containersMap.get(selectKey);
+            value = containersMap.get(selectKey);
             containersMap.put(selectKey, changeValue(value));
             sendMessage(selectKey, value);
-            count++;
         }
-
     }
 
-
     public double changeValue(double value) {
-        int chngAmnt;   //3
+        int chngAmnt;
         int chngProb;
         double res = value;
 
@@ -116,8 +113,8 @@ public class DataGenerator {
         return res;
     }
 
-    public void sendMessage(String randomKey, Double value) {
-        streamBridge.send("topic-0", new ContainerData(randomKey, value));
+    public void sendMessage(String selectKey, Double value) {
+        streamBridge.send("topic-0", new ContainerData(selectKey, value));
     }
 
     private int randomInt(int min, int max) {
