@@ -10,15 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-
 @RequiredArgsConstructor
 @Service
 public class DataGenerator {
 
     private final StreamBridge streamBridge;
 
-    @Value("${n_messages}")
-    private final int N_MESSAGES = 300;
+    @Value("${n_messages:100}")
+    private final int N_MESSAGES;
     @Value("${n_containers}")
     private final int N_CONTAINERS = 5;
 
@@ -55,6 +54,7 @@ public class DataGenerator {
     @Value("${spot_number_to}")
     private final int MAX_NUM = 10;
 
+    public final String bindingName = "sendMessage-out-0";
     public final Map<String, Double> containersMap = new HashMap<>();
     public List<String> keysList;
     public String selectKey;
@@ -89,13 +89,13 @@ public class DataGenerator {
         double res = value;
 
         if (value <= CONTAINER_LOWEST * 100) {
-            chngAmnt = randomInt(MIN_INCREASE, MAX_INCREASE); // 3
-            chngProb = new Random().nextInt((0), 2);
+            chngAmnt = randomInt(MIN_INCREASE, MAX_INCREASE);
+            chngProb = new Random().nextInt((0), 2); // 0 to 1
             double temp = value + chngAmnt * chngProb;
             res = temp < 0 ? 0 : temp;
 
         } else if (value > 10 && value <= CONTAINER_THRESHOLD * 100) {
-            chngProb = new Random().nextInt((-1), 2);
+            chngProb = new Random().nextInt((-1), 2); // -1 to 1
             chngAmnt = chngProb < 0 ? randomInt(MIN_DECREASE, MAX_DECREASE) : randomInt(MIN_INCREASE, MAX_INCREASE);
             double temp = value + chngAmnt * chngProb;
             if (temp > 100)
@@ -106,7 +106,7 @@ public class DataGenerator {
 
         } else if (value > CONTAINER_THRESHOLD * 100) {
             chngAmnt = randomInt(MIN_DECREASE, MAX_DECREASE);
-            chngProb = new Random().nextInt((-1), 1);
+            chngProb = new Random().nextInt((-1), 1); // -1 to 0
             double temp = value + chngAmnt * chngProb;
             res = temp > 100 ? 100 : temp;
         }
@@ -114,7 +114,7 @@ public class DataGenerator {
     }
 
     public void sendMessage(String selectKey, Double value) {
-        streamBridge.send("topic-0", new ContainerData(selectKey, value));
+        streamBridge.send(bindingName, new ContainerData(selectKey, value));
     }
 
     private int randomInt(int min, int max) {
