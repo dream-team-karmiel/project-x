@@ -22,9 +22,9 @@ public class SaveDataToDatabaseImpl implements SaveDataToDatabase
 {
     private final ObjectMapper mapper = new ObjectMapper();
 
+    @Autowired
     final QuantityRepo repo;
 
-    @Override
     @Bean
     public Consumer<String> receiveSensorData()
     {
