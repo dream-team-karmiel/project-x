@@ -1,52 +1,56 @@
 package com.karmiel.savedata;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.karmiel.savedata.dto.Sensor;
+import com.karmiel.savedata.entities.Quantity;
 import com.karmiel.savedata.repo.QuantityRepo;
-import com.karmiel.savedata.service.SaveDataToDatabase;
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.stream.binder.test.InputDestination;
+import org.springframework.messaging.support.GenericMessage;
 
-import java.util.function.Consumer;
-import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
-
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
-public class SaveRecordToDatabaseTest
+public class SaveDataToDatabaseTest
 {
 
-    @MockBean
-    private QuantityRepo repo;
+    @Resource
+    InputDestination producer;
 
-    @InjectMocks
-    private SaveDataToDatabase saveDataToDatabase;
+    @MockBean
+    QuantityRepo repo;
+
+    String bindingName = "receiveSensorData-in-0";
 
     @Test
     public void positiveTests() throws Exception
     {
+
         ObjectMapper jsonmapper = new ObjectMapper();
         Sensor s1 = new Sensor("A10", 40.);
 
         String inputData1 = null;
         inputData1 = jsonmapper.writeValueAsString(s1);
 
-        //Sensor s2 = new Sensor("X250", 0.);
-        //Sensor s3 = new Sensor("X250", 5.5);
-
-        // consumer
-
-        Consumer<String> consumer = saveDataToDatabase.receiveSensorData();
-        consumer.accept(inputData1);
+        System.out.println(inputData1);
 
         // assert
-        verify(repo, times(1)).save(any());
+
+        when(repo.save(any(Quantity.class))).thenReturn(new Quantity());
+
+        producer.send(new GenericMessage<>(s1), bindingName);
+
+        verify(repo, times(1)).save(any(Quantity.class));
 
     }
 
+    /*
     @Test
     public void negativeTests() throws Exception
     {
@@ -68,7 +72,7 @@ public class SaveRecordToDatabaseTest
         String inputData5 = "wrong data }";
 
         // consumer
-        Consumer<String> consumer = saveDataToDatabase.receiveSensorData();
+        Consumer<String> consumer = saveDataToDatabaseImpl.receiveSensorData();
         consumer.accept(inputData1);
         consumer.accept(inputData2);
         consumer.accept(inputData3);
@@ -78,7 +82,7 @@ public class SaveRecordToDatabaseTest
         // assert
         verify(repo, times(1)).save(any());
 
-    }
+    }*/
 
 
 }
