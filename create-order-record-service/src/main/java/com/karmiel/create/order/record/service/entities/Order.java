@@ -24,4 +24,13 @@ public class Order {
     private Double requiredQuantity;
     private OrderStatus orderStatus;
 
+    public Order(String id, String spotCoordinates, LocalDateTime creationDate, LocalDateTime closeDate, String productName, Double requiredQuantity, OrderStatus orderStatus) {
+        this.id = id;
+        this.spotCoordinates = spotCoordinates;
+        this.creationDate = creationDate;
+        this.closeDate = closeDate;
+        this.productName = productName;
+        this.requiredQuantity = requiredQuantity;
+        this.orderStatus = orderStatus;
+    }
 }
