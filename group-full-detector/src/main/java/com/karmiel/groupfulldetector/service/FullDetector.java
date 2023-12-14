@@ -1,7 +1,7 @@
 package com.karmiel.groupfulldetector.service;
 
-import com.karmiel.groupfulldetector.dto.OrderItem;
+import com.karmiel.groupfulldetector.dto.FullData;
 
 public interface FullDetector {
-    String fullDetection(OrderItem orderItem);
+    String checkOrder(FullData data);
 }
