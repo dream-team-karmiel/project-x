@@ -18,41 +18,41 @@ public class DataGenerator {
 
     @Value("${n_messages:100}")
     private final int N_MESSAGES;
-    @Value("${n_containers}")
-    private final int N_CONTAINERS = 5;
+    @Value("${n_containers:10}")
+    private final int N_CONTAINERS;
 
-    @Value("${container_threshold}")
-    private final double CONTAINER_THRESHOLD = 0.5;
-    @Value("${container_lowest}")
-    private final double CONTAINER_LOWEST = 0.1;
+    @Value("${container_threshold:0.5}")
+    private final double CONTAINER_THRESHOLD;
+    @Value("${container_lowest:0.1}")
+    private final double CONTAINER_LOWEST;
 
     //initial container quantites
-    @Value("${min_qty}")
-    private final int MIN_QTY = 75;
-    @Value("${max_qty}")
-    private final int MAX_QTY = 100;
+    @Value("${min_qty:75}")
+    private final int MIN_QTY;
+    @Value("${max_qty:100}")
+    private final int MAX_QTY;
 
     // decrease amount
-    @Value("${min_decrease}")
-    private final int MIN_DECREASE = 5;
-    @Value("${max_decrease}")
-    private final int MAX_DECREASE = 10;
+    @Value("${min_decrease:5}")
+    private final int MIN_DECREASE;
+    @Value("${max_decrease:10}")
+    private final int MAX_DECREASE;
 
     // increase amount
-    @Value("${max_decrease}")
-    private final int MIN_INCREASE = 70;
-    @Value("${max_increase}")
-    private final int MAX_INCREASE = 100;
+    @Value("${min_increase:70}")
+    private final int MIN_INCREASE;
+    @Value("${max_increase:100}")
+    private final int MAX_INCREASE;
 
     //SpotCoordinates
-    @Value("${spot_letter_from}")
-    private final char MIN_LETTER = 'A';
-    @Value("${spot_letter_to}")
-    private final char MAX_LETTER = 'B';
-    @Value("${spot_number_from}")
-    private final int MIN_NUM = 1;
-    @Value("${spot_number_to}")
-    private final int MAX_NUM = 10;
+    @Value("${spot_letter_from:'A'}")
+    private final char MIN_LETTER;
+    @Value("${spot_letter_to:'B'}")
+    private final char MAX_LETTER;
+    @Value("${spot_number_from:1}")
+    private final int MIN_NUM;
+    @Value("${spot_number_to:10}")
+    private final int MAX_NUM;
 
     public final String bindingName = "sendMessage-out-0";
     public final Map<String, Double> containersMap = new HashMap<>();
@@ -62,20 +62,18 @@ public class DataGenerator {
 
     @PostConstruct
     public void populateContainerMap() {
-        while (containersMap.size() < N_CONTAINERS) {
-            String randomKey = randomKeyGen(MIN_LETTER, N_CONTAINERS);
-            while (!containersMap.containsKey(randomKey)) {
-                Double randomValue = (double) randomInt(MIN_QTY, MAX_QTY);
-                containersMap.put(randomKey, randomValue);
-            }
+        for (int i = 1; i <= N_CONTAINERS; i++) {
+            String randomKey = "" + MIN_LETTER + i;
+            Double randomValue = (double) randomInt(MIN_QTY, MAX_QTY);
+            containersMap.put(randomKey, randomValue);
         }
     }
 
     @Bean
-    public void dataImitator(){
+    public void dataImitator() {
         keysList = containersMap.keySet().stream().toList();
 
-        while(true){
+        while (true) {
             selectKey = keysList.get(randomInt(0, N_CONTAINERS));
             value = containersMap.get(selectKey);
             containersMap.put(selectKey, changeValue(value));
