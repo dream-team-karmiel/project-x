@@ -6,15 +6,10 @@ import com.karmiel.groupfulldetector.dto.Order;
 import com.karmiel.groupfulldetector.enities.OrderData;
 import com.karmiel.groupfulldetector.repo.ItemRepository;
 import com.karmiel.groupfulldetector.utils.OrderStatus;
-import jakarta.annotation.Resource;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.cloud.stream.binder.test.*;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
@@ -32,18 +27,14 @@ import static org.mockito.Mockito.*;
 @Import(TestChannelBinderConfiguration.class)
 public class GroupFullDetectorTest {
 
-    @Autowired //(required = false)
-//    @Resource
+    @Autowired
     InputDestination producer;
     @Autowired
-//    @Resource
     OutputDestination consumer;
     @MockBean
     ItemRepository repository;
 
-   //@Value("${spring.cloud.stream.bindings.full-out-0.destination:check-open-order}")
     String producerBindingName = "receiveFullData-in-0";
-    //@Value("${spring.cloud.stream.bindings.full-in-0.destination:close-order}")
    String consumerBindingName = "close-order";
 
     @Test
