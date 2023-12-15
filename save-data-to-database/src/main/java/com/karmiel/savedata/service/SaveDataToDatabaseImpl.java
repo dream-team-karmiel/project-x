@@ -8,7 +8,6 @@ import com.karmiel.savedata.repo.QuantityRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -32,25 +31,29 @@ public class SaveDataToDatabaseImpl implements SaveDataToDatabase
         {
             if (data != null)
             {
-                Sensor s = null;
                 try
                 {
-                    s = mapper.readValue(data, Sensor.class);
+                    Sensor sensor = mapper.readValue(data, Sensor.class);
+
+                    if (sensor.spotCoordinates().equals("") || sensor.quantity() < 0.) {
+                        log.trace("sensor data not valid. Sensor: {}", sensor);
+                        return;
+                    }
+
                     var time = LocalDateTime.now();
 
-                    Quantity q = new Quantity();
-                    q.setQuantity(s.quantity());
-                    q.setContainerId(s.spotCoordinates());
-                    q.setSensorDate(time);
+                    Quantity quantity = new Quantity();
+                    quantity.setQuantity(sensor.quantity());
+                    quantity.setContainerId(sensor.spotCoordinates());
+                    quantity.setSensorDate(time);
 
-                    var saved = repo.save(q);
+                    Quantity saved = repo.save(quantity);
 
-                    log.trace("Quantity {} saved to db", saved);
+                    log.trace("Quantity {} saved to db ", saved);
 
                 } catch (JsonProcessingException e)
                 {
-                    log.trace(e.getMessage());
-                    throw new RuntimeException(e);
+                    log.debug("Invalid data on input: " + e.getMessage());
                 }
             }
         };
