@@ -3,6 +3,7 @@ package com.karmiel.groupfulldetector.service;
 import com.karmiel.groupfulldetector.dto.FullData;
 import com.karmiel.groupfulldetector.enities.OrderData;
 import com.karmiel.groupfulldetector.repo.ItemRepository;
+import com.karmiel.groupfulldetector.utils.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,7 +19,7 @@ public class FullDetectorImpl implements FullDetector{
     @Override
     public String checkOrder(FullData data) {
         String containerId = data.spotCoordinates();
-        Optional<OrderData> orderData = itemRepository.findOrderBySpotCoordinatesAndStatus(containerId);
+        Optional<OrderData> orderData = itemRepository.findOrderBySpotCoordinatesAndStatus(containerId, OrderStatus.CONFIRMED);
         return orderData.map(OrderData::getId).orElse(null);
     }
 }

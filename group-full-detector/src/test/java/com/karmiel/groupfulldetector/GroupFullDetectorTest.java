@@ -42,13 +42,12 @@ public class GroupFullDetectorTest {
     void sendRequestToCloseOrder() throws Exception{
         String containerId = "A11";
         FullData fullData = new FullData(containerId);
-
         OrderData order = new OrderData();
         order.setId("348");
         order.setSpotCoordinates(containerId);
         order.setOrderStatus(OrderStatus.CONFIRMED);
 
-        when(repository.findOrderBySpotCoordinatesAndStatus(containerId)).thenReturn(Optional.of(order));
+        when(repository.findOrderBySpotCoordinatesAndStatus(containerId, OrderStatus.CONFIRMED)).thenReturn(Optional.of(order));
 
         producer.send(new GenericMessage<>(fullData), producerBindingName);
 
@@ -62,14 +61,10 @@ public class GroupFullDetectorTest {
     @Test
     @DirtiesContext
     void notSendRequestToCloseOrder() throws Exception{
-        String id = "A11";
-        FullData fullData = new FullData(id);
-        OrderData order = new OrderData();
-        order.setId("349");
-        order.setSpotCoordinates(id);
-        order.setOrderStatus(OrderStatus.DONE);
+        String containerId = "A11";
+        FullData fullData = new FullData(containerId);
 
-        when(repository.findOrderBySpotCoordinatesAndStatus(id)).thenReturn(Optional.empty());
+        when(repository.findOrderBySpotCoordinatesAndStatus(containerId, OrderStatus.CONFIRMED)).thenReturn(Optional.empty());
 
         producer.send(new GenericMessage<>(fullData), producerBindingName);
 
