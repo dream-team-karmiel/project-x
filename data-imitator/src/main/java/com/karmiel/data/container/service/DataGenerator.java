@@ -16,42 +16,42 @@ public class DataGenerator {
 
     private final StreamBridge streamBridge;
 
-    @Value("${n_messages:100}")
+    @Value("${com.karmiel.project-x.data-imitator.n_messages:100}")
     private final int N_MESSAGES;
-    @Value("${n_containers:10}")
+    @Value("${com.karmiel.project-x.data-imitator.n_containers:10}")
     private final int N_CONTAINERS;
 
-    @Value("${container_threshold:0.5}")
+    @Value("${com.karmiel.project-x.data-imitator.container_threshold:0.5}")
     private final double CONTAINER_THRESHOLD;
-    @Value("${container_lowest:0.1}")
+    @Value("${com.karmiel.project-x.data-imitator.container_lowest:0.1}")
     private final double CONTAINER_LOWEST;
 
     //initial container quantites
-    @Value("${min_qty:75}")
+    @Value("${com.karmiel.project-x.data-imitator.min_qty:75}")
     private final int MIN_QTY;
-    @Value("${max_qty:100}")
+    @Value("${com.karmiel.project-x.data-imitator.max_qty:100}")
     private final int MAX_QTY;
 
     // decrease amount
-    @Value("${min_decrease:5}")
+    @Value("${com.karmiel.project-x.data-imitator.min_decrease:5}")
     private final int MIN_DECREASE;
-    @Value("${max_decrease:10}")
+    @Value("${com.karmiel.project-x.data-imitator.max_decrease:10}")
     private final int MAX_DECREASE;
 
     // increase amount
-    @Value("${min_increase:70}")
+    @Value("${com.karmiel.project-x.data-imitator.min_increase:70}")
     private final int MIN_INCREASE;
-    @Value("${max_increase:100}")
+    @Value("${com.karmiel.project-x.data-imitator.max_increase:100}")
     private final int MAX_INCREASE;
 
     //SpotCoordinates
-    @Value("${spot_letter_from:'A'}")
+    @Value("${com.karmiel.project-x.data-imitator.spot_letter_from:'A'}")
     private final char MIN_LETTER;
-    @Value("${spot_letter_to:'B'}")
+    @Value("${com.karmiel.project-x.data-imitator.spot_letter_to:'B'}")
     private final char MAX_LETTER;
-    @Value("${spot_number_from:1}")
+    @Value("${com.karmiel.project-x.data-imitator.spot_number_from:1}")
     private final int MIN_NUM;
-    @Value("${spot_number_to:10}")
+    @Value("${com.karmiel.project-x.data-imitator.spot_number_to:10}")
     private final int MAX_NUM;
 
     public final String bindingName = "sendMessage-out-0";
@@ -61,6 +61,11 @@ public class DataGenerator {
     public Double value;
 
     @PostConstruct
+    public void startService () throws InterruptedException {
+        populateContainerMap();
+        dataImitator();
+    }
+
     public void populateContainerMap() {
         for (int i = 1; i <= N_CONTAINERS; i++) {
             String randomKey = "" + MIN_LETTER + i;
@@ -69,8 +74,8 @@ public class DataGenerator {
         }
     }
 
-    @Bean
-    public void dataImitator() {
+
+    public void dataImitator() throws InterruptedException {
         keysList = containersMap.keySet().stream().toList();
 
         while (true) {
@@ -78,6 +83,7 @@ public class DataGenerator {
             value = containersMap.get(selectKey);
             containersMap.put(selectKey, changeValue(value));
             sendMessage(selectKey, value);
+            Thread.sleep(500);
         }
     }
 
