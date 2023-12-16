@@ -2,6 +2,7 @@ package com.karmiel.close.record.service.bislog;
 
 import com.karmiel.close.record.service.dto.CloseRecordDto;
 import com.karmiel.close.record.service.entities.Order;
+import com.karmiel.close.record.service.enums.OrderStatus;
 import com.karmiel.close.record.service.repo.OrdersDataRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class CloseRecordImpl implements CloseRecord{
         }
 
         order.setCloseDate(LocalDateTime.now());
-        order.setOrderStatus("Done");
+        order.setOrderStatus(OrderStatus.DONE);
         try {
             ordersDataRepo.save(order);
             log.trace("Order {} update", id);

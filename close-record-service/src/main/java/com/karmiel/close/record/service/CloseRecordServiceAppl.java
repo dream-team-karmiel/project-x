@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
 import java.util.function.Consumer;
 
 // Alex Zakharov
@@ -16,17 +17,17 @@ import java.util.function.Consumer;
 @Slf4j
 public class CloseRecordServiceAppl {
     @Resource
-   final CloseRecord service;
-
+    final CloseRecord service;
 
     public static void main(String[] args) {
         SpringApplication.run(CloseRecordServiceAppl.class);
     }
-@Bean
-Consumer<CloseRecordDto> orderDtoConsumer(){
-    return data -> {
-service.closeRecord(data);
-    };
-}
+
+    @Bean
+    Consumer<CloseRecordDto> orderDtoConsumer() {
+        return data -> {
+            service.closeRecord(data);
+        };
+    }
 
 }

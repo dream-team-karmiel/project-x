@@ -1,12 +1,12 @@
 package com.karmiel.close.record.service;
 import com.karmiel.close.record.service.dto.CloseRecordDto;
 import com.karmiel.close.record.service.entities.Order;
+import com.karmiel.close.record.service.enums.OrderStatus;
 import com.karmiel.close.record.service.repo.OrdersDataRepo;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.binder.test.InputDestination;
-import org.springframework.cloud.stream.binder.test.OutputDestination;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,8 +24,8 @@ class CloseRecordServiceTest {
     @MockBean
     OrdersDataRepo OrdersRepo;
 
-    static Order order = new Order("123", ID_ORDER, LocalDateTime.now(), LocalDateTime.now(), "TestProductName", 12.3, "TestStatusEnter");
-    static Order updateOrder = new Order("123", ID_ORDER, LocalDateTime.now(), LocalDateTime.now(), "TestProductName", 12.3, "TestStatusDone");
+    static Order order = new Order("123", ID_ORDER, LocalDateTime.now(), LocalDateTime.now(), "TestProductName", 12.3, OrderStatus.CONFIRMED);
+    static Order updateOrder = new Order("123", ID_ORDER, LocalDateTime.now(), LocalDateTime.now(), "TestProductName", 12.3, OrderStatus.DONE);
     static CloseRecordDto recordOrder = new CloseRecordDto(ID_ORDER);
     static CloseRecordDto recordOrderNoId = new CloseRecordDto(NO_ORDER_ID);
 
@@ -44,13 +44,12 @@ class CloseRecordServiceTest {
         when(OrdersRepo.save(updateOrder))
                 .thenAnswer(invocation -> {
                     Order savedOrder = invocation.getArgument(0);
-                    savedOrder.setOrderStatus("Done");
+                    savedOrder.setOrderStatus(OrderStatus.DONE);
                     savedOrder.setCloseDate(LocalDateTime.now());
                     return savedOrder;
                 });
 
         producer.send(new GenericMessage<>(recordOrder), BINDING_NAME);
         verify(OrdersRepo, times(1)).save(any(Order.class));
-//        assertEquals(EXPECTED_STATUS,updateOrder.getOrderStatus());
     }
 }
