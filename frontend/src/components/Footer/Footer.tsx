@@ -10,7 +10,18 @@ function Footer() {
         py: 3,
       }}
     >
-      <Container maxWidth='lg'>
+      <Container
+        maxWidth='lg'
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          // gap: "3rem",
+          // py: 3,
+        }}
+      >
         <Typography variant='body1' color='text.secondary' align='center'>
           © OptimaDevs
         </Typography>
