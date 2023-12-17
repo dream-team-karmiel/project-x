@@ -1,4 +1,5 @@
 package com.karmiel.close.record.service;
+
 import com.karmiel.close.record.service.dto.CloseRecordDto;
 import com.karmiel.close.record.service.entities.Order;
 import com.karmiel.close.record.service.enums.OrderStatus;
@@ -6,14 +7,19 @@ import com.karmiel.close.record.service.repo.OrdersDataRepo;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.binder.test.InputDestination;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
+import org.springframework.context.annotation.Import;
+import org.springframework.messaging.support.GenericMessage;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.messaging.support.GenericMessage;
+
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@Import(TestChannelBinderConfiguration.class)
 class CloseRecordServiceTest {
     private static final String ID_ORDER = "107";
     private static final String NO_ORDER_ID = " ";
