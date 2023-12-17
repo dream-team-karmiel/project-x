@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.binder.test.InputDestination;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.messaging.support.GenericMessage;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@Import(TestChannelBinderConfiguration.class)
 class SaveRecordServiceImplTest {
     @Resource
     InputDestination producer;
