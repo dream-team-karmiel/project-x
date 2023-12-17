@@ -1,86 +1,77 @@
 package com.karmiel.reducer;
 
-//import com.karmiel.reducer.Sensor;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.karmiel.reducer.repository.SensorRepository;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.messaging.support.GenericMessage;
 
+import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
-
+import static org.mockito.Mockito.*;
+import static org.springframework.test.util.AssertionErrors.*;
 
 @SpringBootTest
-//@ExtendWith(SpringExtension.class)
-//@Import(TestChannelBinderConfiguration.class)
 public class DataReducerAppTest {
+    private static final String SENSOR_LOCATION = "location1";
+    private static final String TOPIC_NAME = "topic-1";
+    private static final String CONSUMER_BINDING_NAME = "sensorConsumer-in-0";
 
     @Autowired(required = false)
     InputDestination producer;
     @Autowired(required = false)
     OutputDestination consumer;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    // Эмуляция репозитория
     @MockBean
     private SensorRepository repository;
 
-    // Случай когда приходит значение в первые
     @Test
-    public void ReceiveNewSensor() {
-        // Создаение сенсора, который будет на входе
-        Sensor newSensor = new Sensor("location1", 100.0);
-
-        // Создаение when
-        when(repository.findById("location1")).thenReturn(Optional.empty());
-        when(repository.save(newSensor))
-                .thenAnswer(invocation -> {
-                    return invocation.<Sensor>getArgument(0);
-                });
-        // Отправка тестового сенсора
-        producer.send(MessageBuilder.withPayload(newSensor).build());
-
-        // Проверка, что на выходе есть сообщение
-        Message<byte[]> receivedMessage = consumer.receive(1000, "Topic-1");
-        assertNotNull("Message not received", receivedMessage);
-        // Проверка, что на выходе есть сенсор с верными данными
-
-        // Проверка, что был вызван метод findById и метод save у Redis
+    public void shouldReceiveAndSaveNewSensorDataWhenSensorIsNotInRepository() throws IOException {
+        Sensor newSensor = new Sensor(SENSOR_LOCATION, 100.0);
+        when(repository.findById(SENSOR_LOCATION)).thenReturn(Optional.empty());
+        setupAndTestSensor(newSensor, true);
+        verify(repository, times(1)).findById(SENSOR_LOCATION);
+        verify(repository, times(1)).save(newSensor);
     }
 
-    // Случай когда приходит значение без изменений
-//    @Test
-//    void ReceiveSensorWithSameData() {
-    // Создание сенсора, который будет на входе
+    @Test
+    public void shouldIgnoreSensorDataIfSensorAlreadyExistsInRepository() throws IOException {
+        Sensor existingSensor = new Sensor(SENSOR_LOCATION, 100.0);
+        when(repository.findById(SENSOR_LOCATION)).thenReturn(Optional.of(existingSensor));
+        setupAndTestSensor(existingSensor, false);
+        verify(repository, times(1)).findById(SENSOR_LOCATION);
+        verify(repository, never()).save(any(Sensor.class));
+    }
 
-    // Создание when, что будет возвращаться сенсор со значением равным значению входящего сенсора
+    @Test
+    public void shouldReceiveAndSaveSensorDataWithUpdatedQuantityIfExistsInRepository() throws IOException {
+        Sensor newSensor = new Sensor(SENSOR_LOCATION, 100.0);
+        Sensor existingSensor = new Sensor(SENSOR_LOCATION, 50.0);
+        when(repository.findById(SENSOR_LOCATION)).thenReturn(Optional.of(existingSensor));
+        setupAndTestSensor(newSensor, true);
+        verify(repository, times(1)).findById(SENSOR_LOCATION);
+        verify(repository, times(1)).save(any(Sensor.class));
+    }
 
-    // Отправка тестового сообщения
-
-    // Проверка, что на выходе нет сообщения (равно null)
-//    }
-
-    // Случай когда приходит новое значение
-//    @Test
-//    void ReceiveSensorWithNewData() {
-    // Создание тестового сенсора
-
-    // Создание when, который будет возвращать сенсор с отличающимся значением
-
-    // Отправка тестового сообщения
-
-    // Проверка, что на выходе есть сообщение
-    // Проверка, что на выходе есть сенсор с верными данными
-    // Проверка, что был вызван метод findById и метод save у Redis
-//    }
+    private void setupAndTestSensor(Sensor sensor, boolean shouldReceive) throws IOException {
+        when(repository.save(sensor)).thenAnswer(invocation -> invocation.getArgument(0));
+        producer.send(new GenericMessage<>(sensor), CONSUMER_BINDING_NAME);
+        Message<byte[]> receivedMessage = consumer.receive(1000, TOPIC_NAME);
+        if (shouldReceive) {
+            assertNotNull("Message not received", receivedMessage);
+            Sensor receivedSensor = objectMapper.readValue(receivedMessage.getPayload(), Sensor.class);
+            assertEquals("Invalid sensor coordinates", SENSOR_LOCATION, receivedSensor.spotCoordinates());
+            assertEquals("Invalid sensor value", 100.0, receivedSensor.quantity());
+        } else {
+            assertNull("Message should not be received", receivedMessage);
+        }
+    }
 }
-
-
-// Создание ответа Redis
