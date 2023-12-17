@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.karmiel.create.order.record.service.dto.NewOrder;
 import com.karmiel.create.order.record.service.entities.OrderStatus;
 import com.karmiel.create.order.record.service.repo.OrdersRecordsRepo;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest
 @Import(TestChannelBinderConfiguration.class)
@@ -35,36 +34,19 @@ class CreateOrderRecordServiceTest {
     @MockBean
     OrdersRecordsRepo repo;
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
     private final String consumerBindingName = "new-required-order";
     private final String producerBindingName = "save-order";
-
-    private static final String SPOT_COORDINATE_ALREADY_PRESENTED = "A01";
-    private static final String SPOT_COORDINATE_NOT_YET_PRESENTED = "A02";
-
-    private static final Set<OrderStatus> statuses = EnumSet.of(OrderStatus.NEW, OrderStatus.CONFIRMED);
-
-    private static NewOrder newOrderAlreadyPresented;
-    private static NewOrder newOrderNotYetPresented;
-
-    @BeforeAll
-    static void setUpAll() {
-        newOrderAlreadyPresented = new NewOrder(
-                SPOT_COORDINATE_ALREADY_PRESENTED,
-                "product-1",
-                .2);
-        newOrderNotYetPresented = new NewOrder(
-                SPOT_COORDINATE_NOT_YET_PRESENTED,
-                "product-2",
-                .2);
-    }
+    private final String SPOT_COORDINATE = "A01";
+    private final Set<OrderStatus> statuses = EnumSet.of(OrderStatus.NEW, OrderStatus.CONFIRMED);
+    private final NewOrder newOrder = new NewOrder(SPOT_COORDINATE, "water", 42.);
 
     @Test
     void orderAlreadyPresentTest() {
-        when(repo.existsBySpotCoordinatesAndOrderStatusIn(SPOT_COORDINATE_ALREADY_PRESENTED, statuses))
-                .thenReturn(true);
+        doReturn(true)
+                .when(repo).existsBySpotCoordinatesAndOrderStatusIn(SPOT_COORDINATE, statuses);
 
-        producer.send(new GenericMessage<>(newOrderAlreadyPresented), consumerBindingName);
+        producer.send(new GenericMessage<>(newOrder), consumerBindingName);
         Message<byte[]> noAnswer = consumer.receive(100, producerBindingName);
 
         assertNull(noAnswer);
@@ -72,13 +54,13 @@ class CreateOrderRecordServiceTest {
 
     @Test
     void orderNotYetPresentTest() throws IOException {
-        when(repo.existsBySpotCoordinatesAndOrderStatusIn(SPOT_COORDINATE_ALREADY_PRESENTED, statuses))
-                .thenReturn(false);
+        doReturn(false)
+                .when(repo).existsBySpotCoordinatesAndOrderStatusIn(SPOT_COORDINATE, statuses);
 
-        producer.send(new GenericMessage<>(newOrderNotYetPresented), consumerBindingName);
+        producer.send(new GenericMessage<>(newOrder), consumerBindingName);
         Message<byte[]> answer = consumer.receive(100, producerBindingName);
 
         assertNotNull(answer);
-        assertEquals(newOrderNotYetPresented, MAPPER.readValue(answer.getPayload(), NewOrder.class));
+        assertEquals(newOrder, mapper.readValue(answer.getPayload(), NewOrder.class));
     }
 }
