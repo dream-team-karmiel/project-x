@@ -17,33 +17,32 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.GenericMessage;
 
 import java.io.IOException;
+import java.util.EnumSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Import(TestChannelBinderConfiguration.class)
 class CreateOrderRecordServiceTest {
-    @Autowired
+    @Autowired(required = false)
     InputDestination producer;
 
-    @Autowired
+    @Autowired(required = false)
     OutputDestination consumer;
 
     @MockBean
     OrdersRecordsRepo repo;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String consumerBindingName = "createOrderRecord-in-0";
-    private static final String producerBindingName = "createOrderRecord-out-0";
+    private final String consumerBindingName = "new-required-order";
+    private final String producerBindingName = "save-order";
 
     private static final String SPOT_COORDINATE_ALREADY_PRESENTED = "A01";
     private static final String SPOT_COORDINATE_NOT_YET_PRESENTED = "A02";
 
-    private static final String[] statuses = new String[] {
-            OrderStatus.NEW.toString(),
-            OrderStatus.CONFIRMED.toString()
-    };
+    private static final Set<OrderStatus> statuses = EnumSet.of(OrderStatus.NEW, OrderStatus.CONFIRMED);
 
     private static NewOrder newOrderAlreadyPresented;
     private static NewOrder newOrderNotYetPresented;
