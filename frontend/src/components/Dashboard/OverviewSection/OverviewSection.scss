@@ -1,0 +1,6 @@
+@import "../../../scss/mixins.scss";
+
+.overview-section__title {
+  @include text-font-large;
+  margin-bottom: 24px;
+}
