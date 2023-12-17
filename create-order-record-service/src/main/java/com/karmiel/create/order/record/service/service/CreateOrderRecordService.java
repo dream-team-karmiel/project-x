@@ -1,7 +1,7 @@
 package com.karmiel.create.order.record.service.service;
 
-import java.util.function.Function;
+import com.karmiel.create.order.record.service.dto.NewOrder;
 
 public interface CreateOrderRecordService {
-    Function<String, String> createOrderRecord();
+    void createOrderRecord(NewOrder newOrder);
 }
