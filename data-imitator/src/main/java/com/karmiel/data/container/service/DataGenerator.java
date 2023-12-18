@@ -17,42 +17,42 @@ public class DataGenerator {
     private final StreamBridge streamBridge;
 
     @Value("${com.karmiel.project-x.data-imitator.n_messages:100}")
-    private final int N_MESSAGES;
+    private  int N_MESSAGES;
     @Value("${com.karmiel.project-x.data-imitator.n_containers:10}")
-    private final int N_CONTAINERS;
+    private  int N_CONTAINERS;
 
     @Value("${com.karmiel.project-x.data-imitator.container_threshold:0.5}")
-    private final double CONTAINER_THRESHOLD;
+    private  double CONTAINER_THRESHOLD;
     @Value("${com.karmiel.project-x.data-imitator.container_lowest:0.1}")
-    private final double CONTAINER_LOWEST;
+    private  double CONTAINER_LOWEST;
 
     //initial container quantites
     @Value("${com.karmiel.project-x.data-imitator.min_qty:75}")
-    private final int MIN_QTY;
+    private  int MIN_QTY;
     @Value("${com.karmiel.project-x.data-imitator.max_qty:100}")
-    private final int MAX_QTY;
+    private  int MAX_QTY;
 
     // decrease amount
     @Value("${com.karmiel.project-x.data-imitator.min_decrease:5}")
-    private final int MIN_DECREASE;
+    private  int MIN_DECREASE;
     @Value("${com.karmiel.project-x.data-imitator.max_decrease:10}")
-    private final int MAX_DECREASE;
+    private  int MAX_DECREASE;
 
     // increase amount
     @Value("${com.karmiel.project-x.data-imitator.min_increase:70}")
-    private final int MIN_INCREASE;
+    private  int MIN_INCREASE;
     @Value("${com.karmiel.project-x.data-imitator.max_increase:100}")
-    private final int MAX_INCREASE;
+    private  int MAX_INCREASE;
 
     //SpotCoordinates
-    @Value("${com.karmiel.project-x.data-imitator.spot_letter_from:'A'}")
-    private final char MIN_LETTER;
-    @Value("${com.karmiel.project-x.data-imitator.spot_letter_to:'B'}")
-    private final char MAX_LETTER;
+    @Value("${com.karmiel.project-x.data-imitator.spot_letter_from:A}")
+    private  char MIN_LETTER;
+    @Value("${com.karmiel.project-x.data-imitator.spot_letter_to:B}")
+    private  char MAX_LETTER;
     @Value("${com.karmiel.project-x.data-imitator.spot_number_from:1}")
-    private final int MIN_NUM;
+    private  int MIN_NUM;
     @Value("${com.karmiel.project-x.data-imitator.spot_number_to:10}")
-    private final int MAX_NUM;
+    private  int MAX_NUM;
 
     public final String bindingName = "sendMessage-out-0";
     public final Map<String, Double> containersMap = new HashMap<>();
