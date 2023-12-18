@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 
 import java.util.function.Consumer;
 
-
 @Controller
 @Slf4j
 public class SensorController {
