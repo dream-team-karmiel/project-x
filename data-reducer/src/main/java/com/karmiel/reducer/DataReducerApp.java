@@ -1,11 +1,11 @@
-package com.karmiel.close.record.service;
+package com.karmiel.reducer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CloseRecordService {
+public class DataReducerApp {
     public static void main(String[] args) {
-        SpringApplication.run(CloseRecordService.class);
+        SpringApplication.run(DataReducerApp.class, args);
     }
 }
