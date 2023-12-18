@@ -21,6 +21,8 @@
         <module>close-record-service</module>
         <module>back-office</module>
         <module>data-imitator</module>
+        <module>data-reducer</module>
+        <module>config-server</module>
     </modules>
 
     <groupId>com.karmiel</groupId>
