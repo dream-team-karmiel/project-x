@@ -1,4 +1,4 @@
-package com.karmiel.data.imitator;
+package com.karmiel.data;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
