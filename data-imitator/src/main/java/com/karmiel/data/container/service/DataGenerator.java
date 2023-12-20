@@ -3,18 +3,23 @@ package com.karmiel.data.container.service;
 import com.karmiel.data.container.dto.ContainerData;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class DataGenerator {
 
     private final StreamBridge streamBridge;
+
 
     @Value("${com.karmiel.project-x.data-imitator.n_messages:100}")
     private  int N_MESSAGES;
@@ -83,6 +88,7 @@ public class DataGenerator {
             value = containersMap.get(selectKey);
             containersMap.put(selectKey, changeValue(value));
             sendMessage(selectKey, value);
+
             Thread.sleep(500);
         }
     }
@@ -119,6 +125,7 @@ public class DataGenerator {
 
     public void sendMessage(String selectKey, Double value) {
         streamBridge.send(bindingName, new ContainerData(selectKey, value));
+        log.info("container= {}, value= {}", selectKey, value );
     }
 
     private int randomInt(int min, int max) {
