@@ -19,43 +19,29 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class SaveDataToDatabaseImpl implements SaveDataToDatabase
 {
-    private final ObjectMapper mapper = new ObjectMapper();
+    //private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     final QuantityRepo repo;
 
     @Bean
-    public Consumer<String> receiveSensorData()
+    public Consumer<Sensor> receiveSensorData()
     {
-        return data ->
+        return sensor ->
         {
-            if (data != null)
-            {
-                try
-                {
-                    Sensor sensor = mapper.readValue(data, Sensor.class);
+            assert sensor != null;
+            assert sensor.quantity() != null;
+            assert sensor.spotCoordinates() != null;
 
-                    if (sensor.spotCoordinates().equals("") || sensor.quantity() < 0.) {
-                        log.trace("sensor data not valid. Sensor: {}", sensor);
-                        return;
-                    }
+            var time = LocalDateTime.now();
+            Quantity quantity = new Quantity();
+            quantity.setQuantity(sensor.quantity());
+            quantity.setContainerId(sensor.spotCoordinates());
+            quantity.setSensorDate(time);
+            Quantity saved = repo.save(quantity);
+            log.trace("Quantity {} saved to db ", saved);
 
-                    var time = LocalDateTime.now();
-
-                    Quantity quantity = new Quantity();
-                    quantity.setQuantity(sensor.quantity());
-                    quantity.setContainerId(sensor.spotCoordinates());
-                    quantity.setSensorDate(time);
-
-                    Quantity saved = repo.save(quantity);
-
-                    log.trace("Quantity {} saved to db ", saved);
-
-                } catch (JsonProcessingException e)
-                {
-                    log.debug("Invalid data on input: " + e.getMessage());
-                }
-            }
         };
+
     }
 }

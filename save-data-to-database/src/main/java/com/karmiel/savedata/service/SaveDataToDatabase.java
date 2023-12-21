@@ -6,5 +6,5 @@ import java.util.function.Consumer;
 
 public interface SaveDataToDatabase
 {
-    public Consumer<String> receiveSensorData();
+    public Consumer<Sensor> receiveSensorData();
 }
