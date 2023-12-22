@@ -8,7 +8,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Measures {
+public class Measure {
     @Id
     private int id;
     @Column(name = "measure_name")
