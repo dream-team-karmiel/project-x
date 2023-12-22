@@ -21,6 +21,7 @@
         <module>close-record-service</module>
         <module>back-office</module>
         <module>data-imitator</module>
+        <module>project-x-lib</module>
     </modules>
 
     <groupId>com.karmiel</groupId>
