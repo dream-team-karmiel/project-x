@@ -15,9 +15,4 @@ public class Container {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
-
-
-
-
-
 }

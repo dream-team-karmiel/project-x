@@ -13,5 +13,4 @@ public class Measure {
     private int id;
     @Column(name = "measure_name")
     private String measureName;
-
 }

@@ -15,11 +15,6 @@ public class Product {
     private String productName;
     @ManyToOne
     @JoinColumn(name = "measure_id", referencedColumnName = "id")
-    private Package packageId;
+    private Measure measure;
     private double capacity;
-
-
-
-
-
 }

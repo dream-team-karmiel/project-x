@@ -19,6 +19,4 @@ public class Quantity {
     @Column(name = "sensor_date")
     private LocalDateTime sensorDate;
     private double quantity;
-
-
 }
