@@ -21,6 +21,8 @@
         <module>close-record-service</module>
         <module>back-office</module>
         <module>data-imitator</module>
+        <module>gateway-security</module>
+        <module>gateway-security</module>
     </modules>
 
     <groupId>com.karmiel</groupId>
