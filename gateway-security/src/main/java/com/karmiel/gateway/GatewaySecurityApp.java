@@ -8,4 +8,10 @@ public class GatewaySecurityApp {
     public static void main(String[] args) {
         SpringApplication.run(GatewaySecurityApp.class);
     }
+
+    /**
+     * for routing configuration check
+     * src/main/resources/application.yaml
+     */
+
 }

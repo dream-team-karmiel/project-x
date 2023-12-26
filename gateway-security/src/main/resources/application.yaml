@@ -1,0 +1,39 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: containers-get
+          uri: ${CONTAINERS_ROUTE_URI}
+          predicates:
+            -Path=/containers/**
+            -Method=GET
+          filters:
+            -PrefixPath=/api/v1
+
+        - id: containers-post
+          uri: ${CONTAINERS_ROUTE_URI}
+          predicates:
+            - Path=/containers/**
+            - Method=POST
+          filters:
+            -PrefixPath=/api/v1
+
+        - id: orders-get
+          uri: ${ORDERS_ROUTE_URI}
+          predicates:
+            - Path=/orders/**
+            - Method=GET
+          filters:
+            - PrefixPath=/api/v1
+
+        - id: orders-post
+          uri: ${ORDERS_ROUTE_URI}
+          predicates:
+            - Path=/orders/**
+            - Method=POST,PATCH
+          filters:
+            - PrefixPath=/api/v1
+
+
+
+
