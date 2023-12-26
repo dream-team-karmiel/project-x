@@ -3,13 +3,17 @@ package com.karmiel.data.container.service;
 import com.karmiel.data.container.dto.ContainerData;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class DataGenerator {
@@ -119,6 +123,7 @@ public class DataGenerator {
 
     public void sendMessage(String selectKey, Double value) {
         streamBridge.send(bindingName, new ContainerData(selectKey, value));
+        log.info("Message container {} value {} sent", selectKey, value);
     }
 
     private int randomInt(int min, int max) {
