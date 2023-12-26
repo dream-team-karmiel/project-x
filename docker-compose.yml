@@ -4,3 +4,32 @@ services:
     build: config-server
     ports:
       - "8888:8888"
+
+  data-imitator:
+    build: data-imitator
+    depends_on:
+      - config-server
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - KAFKA_SENSOR=bmahnlir-sensor-data
+      - KAFKA_URL=${KAFKA_URL}
+      - KAFKA_CONFIG=${KAFKA_CONFIG}
+
+  data-reducer:
+    build: data-reducer
+    depends_on:
+      - config-server
+      - redis-service
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - KAFKA_SENSOR=bmahnlir-sensor-data
+      - KAFKA_SENSOR_NEW=bmahnlir-new-data
+      - KAFKA_REDUCER_GROUP=bmahnlir-reducer-group
+      - KAFKA_URL=${KAFKA_URL}
+      - KAFKA_CONFIG=${KAFKA_CONFIG}
+      - REDIS_HOST=redis-service
+
+  redis-service:
+    image: redis
+    ports:
+      - "6380:6379"
