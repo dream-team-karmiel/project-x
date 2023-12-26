@@ -1,15 +1,15 @@
 package com.karmiel.reducer.controller;
 
-import com.karmiel.reducer.Sensor;
+import com.karmiel.reducer.dto.SensorDto;
 import com.karmiel.reducer.service.SensorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Controller;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
 
-@Controller
+@Configuration
 @Slf4j
 public class SensorController {
     private final SensorService service;
@@ -19,10 +19,10 @@ public class SensorController {
     }
 
     @Bean
-    public Consumer<Sensor> sensorConsumer() {
-        return sensor -> {
-            log.trace("Sensor processing with coordinates: {}, and value: {}", sensor.spotCoordinates(), sensor.quantity());
-            service.saveSensor(sensor);
+    public Consumer<SensorDto> sensorConsumer() {
+        return sensorDto -> {
+            log.info("Sensor processing with coordinates: {}, and value: {}", sensorDto.spotCoordinates(), sensorDto.quantity());
+            service.saveSensor(sensorDto);
         };
     }
 }

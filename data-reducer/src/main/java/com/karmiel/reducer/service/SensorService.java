@@ -1,9 +1,9 @@
 package com.karmiel.reducer.service;
 
-import com.karmiel.reducer.Sensor;
+import com.karmiel.reducer.dto.SensorDto;
 
 public interface SensorService {
 
-    void saveSensor(Sensor sensor);
+    void saveSensor(SensorDto sensorDto);
 
 }
