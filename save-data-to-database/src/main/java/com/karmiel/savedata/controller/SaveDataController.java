@@ -18,7 +18,7 @@ public class SaveDataController {
     @Bean
     Consumer<QuantityDto> receiveNewData() {
         return data ->  {
-            log.info("Data spotCoordinates {}, quantity {} received", data.spotCoordinates(), data.quantity());
+            log.trace("Data spotCoordinates {}, quantity {} received", data.spotCoordinates(), data.quantity());
             service.saveData(data);
         };
     }
