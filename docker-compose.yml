@@ -33,3 +33,29 @@ services:
     image: redis
     ports:
       - "6380:6379"
+
+  postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: container-db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5433:5432"
+    volumes:
+        - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  save-data:
+    build: save-data-to-database
+    depends_on:
+      - config-server
+      - postgres-db
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - KAFKA_URL=${KAFKA_URL}
+      - KAFKA_CONFIG=${KAFKA_CONFIG}
+      - KAFKA_SENSOR_NEW=bmahnlir-new-data
+      - KAFKA_SAVE_DATA_GROUP=bmahnlir-save-data-group
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/container-db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
