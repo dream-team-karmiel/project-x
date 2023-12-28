@@ -87,7 +87,7 @@ public class DataGenerator {
             value = containersMap.get(selectKey);
             containersMap.put(selectKey, changeValue(value));
             sendMessage(selectKey, value);
-            Thread.sleep(500);
+            Thread.sleep(2000);
         }
     }
 
