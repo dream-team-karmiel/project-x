@@ -44,7 +44,7 @@ class SaveDataAppTest {
         producer.send(new GenericMessage<>(quantityDto), bindingName);
 
         // then
-        verify(repository).save(any(Quantity.class));
+        verify(repository, times(1)).save(any(Quantity.class));
         Quantity capturedQuantity = quantityArgumentCaptor.getValue();
         assertEquals("A01", capturedQuantity.getContainerId());
         assertEquals(42., capturedQuantity.getQuantity());
