@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +15,7 @@ public class Quantity {
     @Id
     private int id;
     @ManyToOne
+    @JoinColumn(name = "container_id", referencedColumnName = "spot_coordinates")
     private Container container;
     private LocalDateTime sensorDate;
     private double quantity;

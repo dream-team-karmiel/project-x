@@ -1,15 +1,10 @@
 package com.karmiel.grouplackdetector.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +15,7 @@ public class Product {
     private int id;
     private String productName;
     @ManyToOne
+    @JoinColumn(name = "measure_id", referencedColumnName = "id")
     private Package packageId;
     private double capacity;
 

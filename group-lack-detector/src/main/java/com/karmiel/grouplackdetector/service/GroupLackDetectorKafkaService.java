@@ -35,6 +35,7 @@ public class GroupLackDetectorKafkaService {
             double capacity = container.getProduct().getCapacity();
             double fullness = 0;
             try {
+                log.trace("quantity {}, capacity {}", data.quantity(), capacity);
                 fullness = data.quantity() / capacity;
             } catch (Exception e) {
                 throw new ArithmeticException("Division by zero");

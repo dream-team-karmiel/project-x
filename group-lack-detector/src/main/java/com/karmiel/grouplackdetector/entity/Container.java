@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "containers")
 public class Container {
     @Id
-    private String spotCoordinatesId;
+    @Column(name = "spot_coordinates")
+    private String spotCoordinates;
     @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
 
