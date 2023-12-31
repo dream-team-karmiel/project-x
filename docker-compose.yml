@@ -37,7 +37,7 @@ services:
   postgres-db:
     image: postgres:latest
     environment:
-      POSTGRES_DB: container-db
+      POSTGRES_DB: projectx
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
@@ -57,7 +57,7 @@ services:
       - KAFKA_CONFIG=${KAFKA_CONFIG}
       - KAFKA_SENSOR_NEW=bmahnlir-new-data
       - KAFKA_SAVE_DATA_GROUP=bmahnlir-save-data-group
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/container-db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/projectx
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
 
@@ -74,7 +74,32 @@ services:
       - KAFKA_GROUP=bmahnlir-lack-detector-group
       - KAFKA_NEW_ORDER=bmahnlir-new-required-order
       - KAFKA_CHECK_ORDER=bmahnlir-check-open-order
-      - DB_URL=jdbc:postgresql://postgres-db:5432/container-db
+      - DB_URL=jdbc:postgresql://postgres-db:5432/projectx
       - DB_USER=root
       - DB_PASSWORD=root
       - CONTAINER_THRESHOLD=0.5
+
+  create-order-record:
+    build: create-order-record-service
+    depends_on:
+      - config-server
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - MONGO_URI=${MONGO_URI}
+      - KAFKA_URL=${KAFKA_URL}
+      - KAFKA_CONFIG=${KAFKA_CONFIG}
+      - KAFKA_NEW_ORDER=bmahnlir-new-required-order
+      - KAFKA_GROUP=bmahnlir-create-order-record-group
+      - KAFKA_CREATE_ORDER=bmahnlir-save-order
+
+  save-record-service:
+    build: save-record-service
+    depends_on:
+      - config-server
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - MONGO_URI=${MONGO_URI}
+      - KAFKA_URL=${KAFKA_URL}
+      - KAFKA_CONFIG=${KAFKA_CONFIG}
+      - KAFKA_CREATE_ORDER=bmahnlir-save-order
+      - KAFKA_SAVE_RECORD_GROUP=bmahnlir-save-record-group
