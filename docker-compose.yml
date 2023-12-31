@@ -116,3 +116,15 @@ services:
       - KAFKA_CHECK_ORDER=bmahnlir-check-open-order
       - KAFKA_FULL_DETECTOR_GROUP=bmahnlir-full-detector-group
       - KAFKA_CLOSE_ORDER=bmahnlir-close-order
+
+  close-record-service:
+    build: close-record-service
+    depends_on:
+      - config-server
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - MONGO_URI=${MONGO_URI}
+      - KAFKA_URL=${KAFKA_URL}
+      - KAFKA_CONFIG=${KAFKA_CONFIG}
+      - KAFKA_CLOSE_ORDER=bmahnlir-close-order
+      - KAFKA_CLOSE_RECORD_GROUP=bmahnlir-close-record-group

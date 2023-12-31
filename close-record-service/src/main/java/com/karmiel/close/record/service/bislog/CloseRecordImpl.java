@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class CloseRecordImpl implements CloseRecord{
 
-    final OrdersDataRepo ordersDataRepo;
+    private final OrdersDataRepo ordersDataRepo;
     @Override
     public void closeRecord(CloseRecordDto closeRecordDto) {
 
-        String id = closeRecordDto.getId();
+        String id = closeRecordDto.id();
         Order order = ordersDataRepo.findById(id).orElse(null);
 
         if(order == null){
@@ -36,6 +36,5 @@ public class CloseRecordImpl implements CloseRecord{
             log.trace("Order isn`t saved");
             throw new RuntimeException(e);
         }
-
     }
 }

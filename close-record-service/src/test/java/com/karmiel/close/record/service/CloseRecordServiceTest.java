@@ -33,6 +33,7 @@ class CloseRecordServiceTest {
     static Order order = new Order("123", ID_ORDER, LocalDateTime.now(), LocalDateTime.now(), "TestProductName", 12.3, OrderStatus.CONFIRMED);
     static Order updateOrder = new Order("123", ID_ORDER, LocalDateTime.now(), LocalDateTime.now(), "TestProductName", 12.3, OrderStatus.DONE);
     static CloseRecordDto recordOrder = new CloseRecordDto(ID_ORDER);
+
     static CloseRecordDto recordOrderNoId = new CloseRecordDto(NO_ORDER_ID);
 
     @Test

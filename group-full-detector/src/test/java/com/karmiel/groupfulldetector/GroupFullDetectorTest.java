@@ -57,7 +57,7 @@ public class GroupFullDetectorTest {
 
         assertNotNull(message);
         ObjectMapper mapper = new ObjectMapper();
-        assertEquals(order.getId(), mapper.readValue(message.getPayload(), Order.class).orderId());
+        assertEquals(order.getId(), mapper.readValue(message.getPayload(), Order.class).id());
     }
 
     @Test
