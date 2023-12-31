@@ -18,10 +18,12 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Import(TestChannelBinderConfiguration.class)
@@ -47,7 +49,7 @@ public class GroupFullDetectorTest {
         order.setSpotCoordinates(containerId);
         order.setOrderStatus(OrderStatus.CONFIRMED);
 
-        when(repository.findOrderBySpotCoordinatesAndStatus(containerId, OrderStatus.CONFIRMED)).thenReturn(Optional.of(order));
+        when(repository.findBySpotCoordinatesAndOrderStatusIn(containerId, Set.of(OrderStatus.CONFIRMED))).thenReturn(List.of(order));
 
         producer.send(new GenericMessage<>(fullData), producerBindingName);
 
@@ -64,7 +66,7 @@ public class GroupFullDetectorTest {
         String containerId = "A11";
         FullData fullData = new FullData(containerId);
 
-        when(repository.findOrderBySpotCoordinatesAndStatus(containerId, OrderStatus.CONFIRMED)).thenReturn(Optional.empty());
+        when(repository.findBySpotCoordinatesAndOrderStatusIn(containerId, Set.of(OrderStatus.CONFIRMED))).thenReturn(new ArrayList<>());
 
         producer.send(new GenericMessage<>(fullData), producerBindingName);
 

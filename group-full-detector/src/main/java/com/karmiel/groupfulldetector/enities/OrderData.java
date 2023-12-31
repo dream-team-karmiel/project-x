@@ -4,10 +4,10 @@ import com.karmiel.groupfulldetector.utils.OrderStatus;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.redis.core.RedisHash;
+
 import java.time.LocalDateTime;
 
-@RedisHash
+//@RedisHash
 @Document(collection = "orders")
 @Data
 public class OrderData {

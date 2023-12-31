@@ -103,3 +103,16 @@ services:
       - KAFKA_CONFIG=${KAFKA_CONFIG}
       - KAFKA_CREATE_ORDER=bmahnlir-save-order
       - KAFKA_SAVE_RECORD_GROUP=bmahnlir-save-record-group
+
+  group-full-detector:
+    build: group-full-detector
+    depends_on:
+      - config-server
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - MONGO_URI=${MONGO_URI}
+      - KAFKA_URL=${KAFKA_URL}
+      - KAFKA_CONFIG=${KAFKA_CONFIG}
+      - KAFKA_CHECK_ORDER=bmahnlir-check-open-order
+      - KAFKA_FULL_DETECTOR_GROUP=bmahnlir-full-detector-group
+      - KAFKA_CLOSE_ORDER=bmahnlir-close-order
