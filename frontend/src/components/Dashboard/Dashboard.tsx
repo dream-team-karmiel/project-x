@@ -38,12 +38,25 @@ const Dashboard: React.FC = () => {
   ).length;
 
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75} mt={"1rem"}>
-      {/* row 1 */}
+    <Grid
+      container
+      rowSpacing={4.5}
+      columnSpacing={2.75}
+      mt={"0.5rem"}
+      sx={{
+        paddingX: {
+          xs: "10px",
+          sm: "16px",
+          md: "20px",
+          lg: "40px",
+        },
+        marginBottom: "1rem",
+      }}
+    >
       <Grid item xs={12} sx={{ mb: -2.25 }}>
         <Typography variant='h5'>Dashboard</Typography>
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={12} sm={6} lg={3}>
         <AnalyticEcommerce
           title='Total Orders'
           count={`${totalOrders} pcs`}

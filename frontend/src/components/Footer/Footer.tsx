@@ -1,29 +1,33 @@
 import React from "react";
-import { Box, Container, Typography, Link } from "@mui/material";
+import { Box, Container, Typography, Link, useTheme } from "@mui/material";
 
 function Footer() {
+  const theme = useTheme();
   return (
     <Box
       sx={{
-        backgroundImage:
-          "linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))",
+        backgroundColor: `${
+          theme.palette.mode === "light"
+            ? theme.palette.primary.main
+            : theme.palette.grey[900]
+        }`,
         py: 3,
       }}
     >
       <Container
         maxWidth='lg'
         sx={{
-          width: "100%",
           display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: "center",
           justifyContent: "space-between",
+          textAlign: { xs: "center", sm: "left" },
         }}
       >
-        <Typography variant='body1' color='text.secondary' align='center'>
+        <Typography variant='body1' sx={{ mb: { xs: 1, sm: 0 } }}>
           © OptimaDevs
         </Typography>
-        <Typography variant='body2' color='text.secondary' align='center'>
+        <Typography variant='body2'>
           <Link color='inherit' href='https://google.com'>
             All rights reserved
           </Link>

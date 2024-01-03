@@ -19,30 +19,15 @@ const App: React.FC = () => {
   return (
     <ThemeCustomization>
       <CssBaseline />
-      <Container maxWidth='lg'>
+      <Container
+        maxWidth='lg'
+        sx={{
+          padding: 0,
+        }}
+      >
         <Header />
         <Dashboard />
-        <Container
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            gap: "1rem",
-            py: 5,
-          }}
-        ></Container>
-        <Container
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            gap: "3rem",
-            py: 3,
-          }}
-        ></Container>
+
         <Footer />
       </Container>
     </ThemeCustomization>
