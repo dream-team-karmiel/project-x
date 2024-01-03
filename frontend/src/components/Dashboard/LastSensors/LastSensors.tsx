@@ -1,5 +1,4 @@
 import React from "react";
-import "./LastSensors.scss";
 import { RootState } from "../../../types/interfaces";
 import { useSelector } from "react-redux";
 import {
@@ -10,7 +9,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
   LinearProgress,
 } from "@mui/material";
 
@@ -19,8 +17,6 @@ function LastSensors() {
 
   return (
     <div>
-      <Typography variant='h3'>Last Sensors</Typography>
-
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -36,7 +32,7 @@ function LastSensors() {
           <TableBody>
             {sensors.map((sensor) => (
               <TableRow key={sensor.id}>
-                <TableCell align='center'>{sensor.id}</TableCell>
+                <TableCell align='left'>{sensor.id}</TableCell>
                 <TableCell align='center'>
                   {sensor.container.product.productName}
                 </TableCell>

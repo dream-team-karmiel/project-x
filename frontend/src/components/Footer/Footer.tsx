@@ -18,8 +18,6 @@ function Footer() {
           flexDirection: "row",
           flexWrap: "wrap",
           justifyContent: "space-between",
-          // gap: "3rem",
-          // py: 3,
         }}
       >
         <Typography variant='body1' color='text.secondary' align='center'>

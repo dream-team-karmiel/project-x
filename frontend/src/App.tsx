@@ -1,27 +1,14 @@
 import React, { useEffect } from "react";
 import { Container } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-
 import Header from "./components/Dashboard/Header/Header";
-import BarChartSection from "./components/Dashboard/BarChartSection/BarChartSection";
-import ChartSection from "./components/Dashboard/ChartSection/ChartSection";
-import OverviewSection from "./components/Dashboard/OverviewSection/OverviewSection";
-import LastSensors from "./components/Dashboard/LastSensors/LastSensors";
-import LastOrders from "./components/Dashboard/LastOrders/LastOrders";
-
 import { ORDERS, CONTAINERS } from "../src/utils/testsObjectsInConstants";
-
 import { useDispatch } from "react-redux";
 import Footer from "./components/Footer/Footer";
+import Dashboard from "./components/Dashboard/Dashboard";
+import ThemeCustomization from "../src/components/themes/index.js";
 
 const App: React.FC = () => {
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,10 +17,11 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeCustomization>
       <CssBaseline />
       <Container maxWidth='lg'>
         <Header />
+        <Dashboard />
         <Container
           sx={{
             width: "100%",
@@ -43,11 +31,7 @@ const App: React.FC = () => {
             gap: "1rem",
             py: 5,
           }}
-        >
-          <OverviewSection />
-          <ChartSection />
-          <BarChartSection />
-        </Container>
+        ></Container>
         <Container
           sx={{
             width: "100%",
@@ -58,13 +42,10 @@ const App: React.FC = () => {
             gap: "3rem",
             py: 3,
           }}
-        >
-          <LastOrders />
-          <LastSensors />
-        </Container>
+        ></Container>
         <Footer />
       </Container>
-    </ThemeProvider>
+    </ThemeCustomization>
   );
 };
 

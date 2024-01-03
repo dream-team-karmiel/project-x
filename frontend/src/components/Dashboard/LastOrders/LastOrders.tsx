@@ -15,10 +15,6 @@ import {
 function LastOrders() {
   const orders = useSelector((state: RootState) => state.orders);
 
-  React.useEffect(() => {
-    console.log(orders);
-  }, [orders]);
-
   return (
     <div>
       <Typography variant='h3'>Last Orders</Typography>
