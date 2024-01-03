@@ -24,10 +24,29 @@ function Footer() {
           textAlign: { xs: "center", sm: "left" },
         }}
       >
-        <Typography variant='body1' sx={{ mb: { xs: 1, sm: 0 } }}>
+        <Typography
+          variant='body1'
+          sx={{
+            mb: { xs: 1, sm: 0 },
+            color: `${
+              theme.palette.mode === "light"
+                ? "#fff"
+                : theme.palette.text.primary
+            }`,
+          }}
+        >
           © OptimaDevs
         </Typography>
-        <Typography variant='body2'>
+        <Typography
+          variant='body2'
+          sx={{
+            color: `${
+              theme.palette.mode === "light"
+                ? "#fff"
+                : theme.palette.text.primary
+            }`,
+          }}
+        >
           <Link color='inherit' href='https://google.com'>
             All rights reserved
           </Link>
