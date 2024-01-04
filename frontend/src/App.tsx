@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Container } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import Header from "./components/Dashboard/Header/Header";
+import Header from "./components/Header/Header";
 import { ORDERS, CONTAINERS } from "../src/utils/testsObjectsInConstants";
 import { useDispatch } from "react-redux";
 import Footer from "./components/Footer/Footer";

@@ -107,4 +107,55 @@ export const CONTAINERS = [
     sensorDate: "2023-12-10T22:17:07.807044",
     quantity: 25,
   },
+  {
+    id: 4,
+    container: {
+      spotCoordinates: "B1",
+      product: {
+        id: 1635,
+        productName: "B One",
+        measure: {
+          id: 7726,
+          measureName: "pcs",
+        },
+        capacity: 100,
+      },
+    },
+    sensorDate: "2023-12-10T22:17:07.807030",
+    quantity: 75,
+  },
+  {
+    id: 5,
+    container: {
+      spotCoordinates: "B2",
+      product: {
+        id: 1635,
+        productName: "B Two",
+        measure: {
+          id: 7726,
+          measureName: "l",
+        },
+        capacity: 100,
+      },
+    },
+    sensorDate: "2023-12-10T22:17:07.807041",
+    quantity: 55,
+  },
+  {
+    id: 6,
+    container: {
+      spotCoordinates: "B3",
+      product: {
+        id: 1635,
+        productName: "B Three",
+        measure: {
+          id: 7726,
+          measureName: "kg",
+        },
+        capacity: 100,
+      },
+    },
+    sensorDate: "2023-12-10T22:17:07.807044",
+    quantity: 100,
+  },
 ];
