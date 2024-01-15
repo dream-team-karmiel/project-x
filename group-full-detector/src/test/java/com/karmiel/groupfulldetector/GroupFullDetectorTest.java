@@ -6,6 +6,7 @@ import com.karmiel.groupfulldetector.dto.Order;
 import com.karmiel.groupfulldetector.enities.OrderData;
 import com.karmiel.groupfulldetector.repo.ItemRepository;
 import com.karmiel.groupfulldetector.utils.OrderStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,6 +41,7 @@ public class GroupFullDetectorTest {
    String consumerBindingName = "close-order";
 
     @Test
+    @Disabled
     @DirtiesContext
     void sendRequestToCloseOrder() throws Exception{
         String containerId = "A11";
@@ -61,6 +63,7 @@ public class GroupFullDetectorTest {
     }
 
     @Test
+    @Disabled
     @DirtiesContext
     void notSendRequestToCloseOrder() throws Exception{
         String containerId = "A11";

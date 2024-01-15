@@ -27,7 +27,7 @@ public class FullDetectorImpl implements FullDetector{
     @Override
     public void orderStatusProcessing(FullData data) {
         String spotCoordinates = data.spotCoordinates();
-        Set<OrderStatus> statuses = Set.of(OrderStatus.CONFIRMED);
+        Set<OrderStatus> statuses = Set.of(OrderStatus.NEW);
         List<OrderData> orders = repository.findBySpotCoordinatesAndOrderStatusIn(spotCoordinates, statuses);
         orders.forEach(o -> {
             streamBridge.send(closeOrderTopic, new Order(o.getId()));
