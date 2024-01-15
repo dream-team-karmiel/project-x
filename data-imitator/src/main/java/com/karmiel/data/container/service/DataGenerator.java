@@ -56,7 +56,7 @@ public class DataGenerator {
                 entry.setValue(changeValue(entry.getValue()));
                 sendMessage(entry.getKey(), entry.getValue());
             }
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         }
     }
 
