@@ -57,9 +57,12 @@ services:
       - KAFKA_CONFIG=${KAFKA_CONFIG}
       - KAFKA_SENSOR_NEW=bmahnlir-new-data
       - KAFKA_SAVE_DATA_GROUP=bmahnlir-save-data-group
-      - SPRING_DATASOURCE_URL=${SQL_URL}
-      - SPRING_DATASOURCE_USERNAME=${SQL_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SQL_PASSWORD}
+#      - SPRING_DATASOURCE_URL=${SQL_URL}
+#      - SPRING_DATASOURCE_USERNAME=${SQL_USERNAME}
+#      - SPRING_DATASOURCE_PASSWORD=${SQL_PASSWORD}
+      - SPRING_DATASOURCE_URL=${POSTGRES_URL}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
 
   group-lack-detector:
     build: group-lack-detector
@@ -74,9 +77,12 @@ services:
       - KAFKA_GROUP=bmahnlir-lack-detector-group
       - KAFKA_NEW_ORDER=bmahnlir-new-required-order
       - KAFKA_CHECK_ORDER=bmahnlir-check-open-order
-      - DB_URL=${SQL_URL}
-      - DB_USER=${SQL_USERNAME}
-      - DB_PASSWORD=${SQL_PASSWORD}
+#      - DB_URL=${SQL_URL}
+#      - DB_USER=${SQL_USERNAME}
+#      - DB_PASSWORD=${SQL_PASSWORD}
+      - DB_URL=${POSTGRES_URL}
+      - DB_USER=${POSTGRES_USERNAME}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
       - CONTAINER_THRESHOLD=0.5
 
   create-order-record:
