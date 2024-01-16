@@ -1,13 +1,14 @@
-package com.karmiel.backoffice.container.model;
+package com.karmiel.backoffice.container.entity;
 
+import com.karmiel.backoffice.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,8 +19,8 @@ public class Container {
     private String spotCoordinates;
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Measure measure;
-    @OneToMany
-    private List<Quantity> quantities;
+    private Product product;
+
+//    private List<Quantity> quantities;
 
 }

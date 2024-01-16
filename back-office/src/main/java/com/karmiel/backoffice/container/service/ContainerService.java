@@ -1,9 +1,17 @@
 package com.karmiel.backoffice.container.service;
 
+import com.karmiel.backoffice.container.dto.ContainerCreateDto;
+import com.karmiel.backoffice.container.dto.ContainerDto;
+import com.karmiel.backoffice.container.dto.ContainerUpdateDto;
+
+import java.util.List;
+
 public interface ContainerService {
-//    List<ContainerDto> getContainers();
-//
-//    ContainerDto getContainerById(String id);
-//
-//    ContainerDto createContainer(ContainerNewRequestDto);
+
+    ContainerDto getContainerById (String id);
+    List<ContainerDto> getAllContainers ();
+    ContainerDto createContainer(ContainerCreateDto containerCreateDto);
+    ContainerDto updateContainer(ContainerUpdateDto containerDto);
+
+
 }

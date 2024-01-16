@@ -3,6 +3,7 @@ package com.karmiel.backoffice.order.dto;
 import com.karmiel.backoffice.order.model.Order;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ public interface OrderMapper {
 
     @BeanMapping(ignoreByDefault = true)
     Order toOrder(OrderCreateRequestDto requestDto);
+
 
     OrderDto toOrderDto(Order order);
 

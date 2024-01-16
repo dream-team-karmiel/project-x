@@ -1,6 +1,7 @@
-package com.karmiel.backoffice.container.model;
+package com.karmiel.backoffice.product.entity;
 
 
+import com.karmiel.backoffice.container.entity.Measure;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

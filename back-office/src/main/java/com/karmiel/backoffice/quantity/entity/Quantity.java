@@ -1,5 +1,6 @@
-package com.karmiel.backoffice.container.model;
+package com.karmiel.backoffice.quantity.entity;
 
+import com.karmiel.backoffice.container.entity.Container;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,9 +15,7 @@ import java.time.LocalDateTime;
 public class Quantity {
     @Id
     private int id;
-    @ManyToOne
-    @JoinColumn(name = "container_id", referencedColumnName = "spot_coordinates")
-    private Container container;
+    private String containerId;
     private LocalDateTime sensorDate;
     private double quantity;
 

@@ -1,6 +1,6 @@
-package com.karmiel.backoffice.container.dto;
+package com.karmiel.backoffice.product.dto;
 
-import com.karmiel.backoffice.container.model.Measure;
+import com.karmiel.backoffice.container.entity.Measure;
 
 public record ProductDto(
         int id,

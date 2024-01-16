@@ -1,7 +1,8 @@
 package com.karmiel.backoffice.container.repository;
 
-import com.karmiel.backoffice.container.model.Container;
+import com.karmiel.backoffice.container.entity.Container;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface ContainerRepository extends PagingAndSortingRepository<Container, String> {
+public interface ContainerRepository extends JpaRepository<Container, String> {
 }

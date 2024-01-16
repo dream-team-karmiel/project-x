@@ -1,6 +1,6 @@
-package com.karmiel.backoffice.container.dto;
+package com.karmiel.backoffice.quantity.dto;
 
-import com.karmiel.backoffice.container.model.Container;
+import com.karmiel.backoffice.container.entity.Container;
 
 import java.time.LocalDateTime;
 

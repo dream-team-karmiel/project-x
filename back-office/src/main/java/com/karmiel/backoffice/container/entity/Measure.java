@@ -1,4 +1,4 @@
-package com.karmiel.backoffice.container.model;
+package com.karmiel.backoffice.container.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
