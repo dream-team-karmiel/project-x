@@ -23,11 +23,19 @@ public class ContainerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ContainerDto> getContainerById(@PathVariable String id) {
+        ResponseEntity responce;
+        try {
+            responce = ResponseEntity.ok(service.getContainerById(id));
 
-        return ResponseEntity.ok(service.getContainerById(id));
+        } catch (Exception e) {
+            responce = ResponseEntity.status(404).body(e.getMessage());
+        }
+
+        return responce;
     }
+
     @GetMapping
-    public ResponseEntity<List<ContainerDto>> getAllContainers(){
+    public ResponseEntity<List<ContainerDto>> getAllContainers() {
         return ResponseEntity.ok(service.getAllContainers());
     }
 

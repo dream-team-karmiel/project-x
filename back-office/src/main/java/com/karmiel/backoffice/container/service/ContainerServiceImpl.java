@@ -9,11 +9,13 @@ import com.karmiel.backoffice.container.repository.ContainerRepository;
 import com.karmiel.backoffice.exception.ResourceNotFoundException;
 import com.karmiel.backoffice.product.entity.Product;
 import com.karmiel.backoffice.product.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
+@RequiredArgsConstructor
 public class ContainerServiceImpl implements ContainerService{
 
     @Autowired
@@ -26,7 +28,7 @@ public class ContainerServiceImpl implements ContainerService{
     @Override
     public ContainerDto getContainerById(String id) {
         Container container = containerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(String.format("Container by id: %s not found", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Container by id: %s not found", id)));
 
         return mapper.toContainerDto(container);
     }
