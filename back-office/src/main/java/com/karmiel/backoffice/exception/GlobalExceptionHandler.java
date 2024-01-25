@@ -16,4 +16,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(e.getMessage());
 
     }
+
+    @ExceptionHandler(NotValidStatusException.class)
+    ResponseEntity<String> notValidStatusHandler (NotValidStatusException e){
+        String errorMessage = e.getMessage();
+        log.error(errorMessage);
+        return ResponseEntity.status(409).body(e.getMessage());
+    }
 }
