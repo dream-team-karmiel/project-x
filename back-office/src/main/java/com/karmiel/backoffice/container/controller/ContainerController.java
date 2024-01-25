@@ -4,9 +4,6 @@ import com.karmiel.backoffice.container.dto.ContainerCreateDto;
 import com.karmiel.backoffice.container.dto.ContainerDto;
 import com.karmiel.backoffice.container.dto.ContainerUpdateDto;
 import com.karmiel.backoffice.container.service.ContainerService;
-import org.apache.hc.core5.http.HttpStatus;
-import org.hibernate.engine.spi.Status;
-import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +20,8 @@ public class ContainerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ContainerDto> getContainerById(@PathVariable String id) {
-        ResponseEntity responce;
-        try {
-            responce = ResponseEntity.ok(service.getContainerById(id));
 
-        } catch (Exception e) {
-            responce = ResponseEntity.status(404).body(e.getMessage());
-        }
-
-        return responce;
+        return ResponseEntity.ok(service.getContainerById(id));
     }
 
     @GetMapping
